@@ -21,20 +21,20 @@
     
     <style>
         :root, [data-theme="dark-futuristic"] {
-            --primary-glow: 0 0 15px rgba(138, 43, 226, 0.5), 0 0 5px rgba(138, 43, 226, 0.7);
-            --bg: #10101a;
-            --bg-light: rgba(23, 23, 38, 0.5);
-            --bg-glass: rgba(23, 23, 38, 0.7);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --text-primary: #f0f0f5;
-            --text-secondary: #a0a0b5;
+            --primary-glow: 0 0 25px rgba(157, 99, 240, 0.7), 0 0 15px rgba(75, 121, 255, 0.5); /* Stronger, dual-color glow */
+            --bg: #0d0d15; /* Slightly darker background */
+            --bg-light: rgba(20, 20, 35, 0.6); /* Slightly darker and more opaque light bg */
+            --bg-glass: rgba(18, 18, 30, 0.85); /* More opaque glass for modals */
+            --border-color: rgba(255, 255, 255, 0.2); /* More visible borders */
+            --text-primary: #e0e0eb; /* Slightly brighter text */
+            --text-secondary: #b0b0c5; /* Slightly brighter secondary text */
             --accent-primary: #9d63f0;
             --accent-secondary: #4b79ff;
-            --danger: #ff4d4d;
-            --success: #34d399;
-            --warning: #ffc400;
+            --danger: #ff6b6b; /* Slightly softer danger */
+            --success: #4cd1a5; /* Slightly softer success */
+            --warning: #ffdb58; /* Slightly softer warning */
             --gcal-color: #4285F4;
-            --radius: 12px;
+            --radius: 14px; /* Slightly larger radius */
             --font-body: 'Inter', sans-serif;
             --font-title: 'Orbitron', 'Inter', sans-serif;
         }
@@ -42,15 +42,16 @@
         [data-theme="light-pro"] {
             --bg: #f4f7fa;
             --bg-light: #ffffff;
-            --bg-glass: rgba(255, 255, 255, 0.8);
-            --border-color: #e2e8f0;
-            --text-primary: #1a202c;
-            --text-secondary: #718096;
+            --bg-glass: rgba(255, 255, 255, 0.95); /* Nearly opaque white for light mode modals */
+            --border-color: #cbd5e0; /* Light gray border */
+            --text-primary: #2d3748; /* Darker text for readability */
+            --text-secondary: #718096; /* Medium gray secondary text */
             --accent-primary: #4f46e5;
             --accent-secondary: #3b82f6;
             --danger: #e53e3e;
             --success: #38a169;
             --warning: #dd6b20;
+            --primary-glow: 0 0 10px rgba(79, 70, 229, 0.3), 0 0 5px rgba(59, 130, 246, 0.2); /* Lighter glow for light theme */
         }
 
         * {
@@ -73,8 +74,8 @@
         }
         
         [data-theme="dark-futuristic"] body {
-             background-image: radial-gradient(circle at 1% 1%, rgba(157, 99, 240, 0.15) 0%, transparent 50%),
-                              radial-gradient(circle at 99% 99%, rgba(75, 121, 255, 0.15) 0%, transparent 50%);
+             background-image: radial-gradient(circle at 1% 1%, rgba(157, 99, 240, 0.2) 0%, transparent 50%),
+                               radial-gradient(circle at 99% 99%, rgba(75, 121, 255, 0.2) 0%, transparent 50%);
             background-attachment: fixed;
         }
 
@@ -98,6 +99,10 @@
             box-shadow: 0 4px 30px rgba(0,0,0,0.1);
         }
 
+        [data-theme="light-pro"] header {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Lighter shadow in light mode */
+        }
+
         .header-top {
             display: flex;
             justify-content: space-between;
@@ -111,7 +116,7 @@
             font-size: clamp(1.5rem, 4vw, 2rem);
             font-weight: 800;
             color: var(--accent-primary);
-            text-shadow: 0 0 8px color-mix(in srgb, var(--accent-primary) 50%, transparent);
+            text-shadow: 0 0 10px color-mix(in srgb, var(--accent-primary) 60%, transparent); /* Stronger text shadow */
         }
         
         .header-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
@@ -133,7 +138,7 @@
         }
         .control-btn:hover, .control-btn.active {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px color-mix(in srgb, var(--accent-primary) 40%, transparent);
+            box-shadow: 0 4px 18px color-mix(in srgb, var(--accent-primary) 50%, transparent); /* Stronger hover shadow */
         }
         
         .smart-add-form { display: flex; gap: 10px; margin-top: 20px; }
@@ -149,7 +154,7 @@
         #smart-add-input:focus {
             outline: none;
             border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 30%, transparent);
+            box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-primary) 40%, transparent); /* Stronger focus glow */
         }
 
         /* --- Main Content View --- */
@@ -176,6 +181,11 @@
             gap: 16px;
             transition: all 0.3s ease;
         }
+
+        [data-theme="light-pro"] .quadrant {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Lighter shadow in light mode */
+        }
+
         .quadrant:hover { transform: translateY(-4px); border-color: var(--accent-primary); }
 
         #q1 { border-top: 4px solid var(--danger); }
@@ -228,6 +238,11 @@
             cursor: grab; transition: all 0.2s ease;
             animation: fadeIn 0.3s ease-out;
         }
+
+        [data-theme="light-pro"] .task-item {
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05); /* Lighter shadow in light mode */
+        }
+
         .task-item.forged {
             border: 2px solid var(--danger);
             box-shadow: 0 0 15px color-mix(in srgb, var(--danger) 50%, transparent);
@@ -263,13 +278,19 @@
         /* --- Modals --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 10, 20, 0.6); backdrop-filter: blur(15px);
+            background: rgba(10, 10, 20, 0.7); /* Slightly more opaque overlay */
+            backdrop-filter: blur(18px); /* More blur */
+            -webkit-backdrop-filter: blur(18px);
             display: flex; align-items: center; justify-content: center;
-            z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
         }
+        /* Adjusted light-pro modal overlay background */
         [data-theme="light-pro"] .modal-overlay {
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.75); /* More opaque white overlay */
+            backdrop-filter: blur(15px); /* Adjusted blur for light theme */
+            -webkit-backdrop-filter: blur(15px);
         }
+
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content {
             background: var(--bg-glass);
@@ -277,11 +298,16 @@
             border-radius: var(--radius);
             padding: 32px; max-width: 600px; width: 90%;
             text-align: center; box-shadow: 0 4px 30px rgba(0,0,0,0.2);
-            transform: scale(0.95); transition: transform 0.3s ease;
+            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1.2); /* Smoother bounce */
             position: relative;
             max-height: 90vh;
             overflow-y: auto;
         }
+
+        [data-theme="light-pro"] .modal-content {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1); /* Lighter shadow in light mode */
+        }
+
         .modal-overlay.active .modal-content { transform: scale(1); }
         .close-modal {
             position: absolute; top: 10px; right: 10px; background: none; border: none;
@@ -311,6 +337,46 @@
             border-left: 3px solid var(--accent-secondary);
         }
         
+        /* --- High-Alert Notification Modal --- */
+        #high-alert-modal .modal-content {
+            border-color: var(--danger);
+            box-shadow: 0 0 40px var(--danger), inset 0 0 20px color-mix(in srgb, var(--danger) 40%, transparent); /* More intense danger glow */
+        }
+        #high-alert-title {
+            font-family: var(--font-title);
+            font-size: 2.2rem; /* Slightly larger */
+            color: var(--danger);
+            text-shadow: 0 0 12px var(--danger);
+            letter-spacing: 0.12em; /* More spacing */
+            text-transform: uppercase;
+        }
+        #high-alert-task-name {
+            font-size: 1.6rem; /* Larger task name */
+            font-weight: 700;
+            margin: 18px 0;
+        }
+        #high-alert-message {
+            font-size: 1.15rem; /* Slightly larger message */
+            color: var(--text-secondary);
+            margin-bottom: 28px; /* More space */
+        }
+        #high-alert-dismiss-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 28px; /* Larger button */
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        #high-alert-dismiss-btn:hover {
+            transform: scale(1.08); /* More pronounced scale */
+            box-shadow: 0 0 20px var(--danger);
+        }
+
+
         /* --- Focus Mode Modal --- */
         #focus-timer {
             font-family: var(--font-title);
@@ -476,6 +542,316 @@
             body { padding: 8px; }
             .header-top, .header-controls { flex-direction: column; align-items: stretch; }
         }
+
+        /* NEW: Professional Custom AI Prompt Dialog Styles */
+        #custom-ai-prompt-dialog {
+            background: rgba(15, 15, 25, 0.95); /* Even more opaque background for solidity */
+            backdrop-filter: blur(30px); /* Increased blur for deep, futuristic effect */
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Stronger, defined border */
+            border-radius: 20px; /* Slightly more rounded corners for a premium feel */
+            padding: 45px; /* More generous padding */
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7), var(--primary-glow); /* Significantly deeper and more vibrant shadow with glow */
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 1.15rem; /* Slightly larger base font size */
+            text-align: center;
+            max-width: 520px; /* Wider for a more commanding presence */
+            margin: 0 auto;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2000; /* Ensures it's on top of everything */
+            display: none;
+            flex-direction: column;
+            gap: 30px; /* More space between main elements */
+            animation: fadeInScaleUp 0.5s cubic-bezier(0.25, 0.8, 0.25, 1.25) forwards; /* Smoother and more pronounced pop-in */
+        }
+
+        /* Light mode specific adjustments for custom AI prompt dialog */
+        [data-theme="light-pro"] #custom-ai-prompt-dialog {
+            background: rgba(255, 255, 255, 0.98); /* Near opaque white */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-color: var(--border-color); /* Use light theme border color */
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2), var(--primary-glow); /* Lighter shadow in light mode */
+            color: var(--text-primary); /* Dark text for light background */
+        }
+
+        #custom-ai-prompt-dialog.active {
+            display: flex;
+        }
+
+        #custom-ai-prompt-dialog p {
+            font-size: 1.35rem; /* More impactful prompt text */
+            font-weight: 700; /* Bolder */
+            color: var(--text-primary);
+            text-shadow: none; /* No text shadow in light mode, relies on strong contrast */
+            margin-bottom: 20px; /* More space below text */
+            line-height: 1.4; /* Improve line height for title */
+        }
+
+        #ai-goal-input {
+            width: calc(100% - 20px);
+            padding: 18px 25px; /* Even more padding in input */
+            border: 1px solid rgba(255, 255, 255, 0.25); /* Stronger input border */
+            border-radius: 12px; /* More rounded input */
+            font-size: 1.1rem; /* Larger input text */
+            background: rgba(255, 255, 255, 0.08); /* Slightly more visible internal background */
+            color: var(--text-primary);
+            transition: border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
+            text-align: left;
+        }
+
+        /* Light mode specific adjustments for input */
+        [data-theme="light-pro"] #ai-goal-input {
+            background: #f8f9fa; /* Very light background for input */
+            border-color: var(--border-color);
+            color: var(--text-primary); /* Dark text for light input */
+        }
+
+        #ai-goal-input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.8; /* Make placeholder more visible */
+        }
+
+        [data-theme="light-pro"] #ai-goal-input::placeholder {
+            color: var(--text-secondary); /* Ensure placeholder is visible in light mode */
+            opacity: 1;
+        }
+
+        #ai-goal-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background-color: rgba(255, 255, 255, 0.15); /* More distinct background on focus */
+            box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-primary) 50%, transparent); /* Even more prominent, softer glow */
+        }
+
+        /* Light mode specific adjustments for input focus */
+        [data-theme="light-pro"] #ai-goal-input:focus {
+            background-color: #ffffff; /* Solid white on focus for contrast */
+            box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-primary) 30%, transparent); /* Lighter glow */
+        }
+
+
+        #custom-ai-prompt-dialog button {
+            background: linear-gradient(45deg, var(--accent-secondary) 5%, var(--accent-primary) 95%); /* More vibrant gradient */
+            color: white;
+            border: none;
+            border-radius: 12px; /* Match input border-radius */
+            padding: 16px 35px; /* Larger, more substantial buttons */
+            font-size: 1.1rem; /* Slightly larger button text */
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1.25); /* Smoother bounce animation */
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4); /* Deeper button shadow */
+            width: 100%;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.3); /* Text shadow for buttons */
+        }
+
+        [data-theme="light-pro"] #custom-ai-prompt-dialog button {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* Lighter shadow for buttons in light mode */
+            text-shadow: none; /* No text shadow in light mode */
+        }
+
+        #custom-ai-prompt-dialog button:hover {
+            transform: translateY(-5px) scale(1.03); /* More pronounced lift and scale */
+            box-shadow: 0 12px 40px color-mix(in srgb, var(--accent-primary) 60%, transparent); /* Stronger, more dispersed glow on hover */
+        }
+
+        [data-theme="light-pro"] #custom-ai-prompt-dialog button:hover {
+            box-shadow: 0 8px 25px color-mix(in srgb, var(--accent-primary) 30%, transparent); /* Lighter hover shadow */
+        }
+
+
+        #custom-ai-prompt-dialog button:last-child {
+            background: color-mix(in srgb, var(--text-secondary) 90%, black); /* Darker, richer grey for cancel */
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        }
+
+        [data-theme="light-pro"] #custom-ai-prompt-dialog button:last-child {
+            background: var(--text-secondary); /* Use light theme secondary color */
+            color: white; /* Ensure white text on dark button */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* Lighter shadow */
+        }
+
+        #custom-ai-prompt-dialog button:last-child:hover {
+            background: color-mix(in srgb, var(--text-secondary) 60%, black); /* Darker on hover */
+            box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+        }
+
+        [data-theme="light-pro"] #custom-ai-prompt-dialog button:last-child:hover {
+            background: color-mix(in srgb, var(--text-secondary) 80%, white); /* Lighter hover state for contrast */
+        }
+
+
+        @keyframes fadeInScaleUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -40%) scale(0.85); /* Start smaller */
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Refined AI Modal Styles (for the response) */
+        #ai-modal .modal-content {
+            max-width: 800px; /* Even wider for extensive content */
+            text-align: left;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.6), var(--primary-glow); /* Much deeper, more ethereal glow */
+            display: flex;
+            flex-direction: column;
+            gap: 25px; /* More space between main sections */
+            backdrop-filter: blur(25px); /* Stronger blur for ultimate glass effect */
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 16px; /* Match new overall radius */
+            padding: 40px; /* Generous padding */
+        }
+
+        /* Light mode specific adjustments for AI modal content */
+        [data-theme="light-pro"] #ai-modal .modal-content {
+            background: rgba(255, 255, 255, 0.98); /* Near opaque white */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-color: var(--border-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15), var(--primary-glow); /* Lighter shadow */
+        }
+
+        #ai-modal-title {
+            font-size: 2.5rem; /* Very large, commanding title */
+            color: var(--accent-primary);
+            text-shadow: 0 0 15px color-mix(in srgb, var(--accent-primary) 70%, transparent), 0 0 5px var(--accent-primary); /* Intense text glow */
+            text-align: center;
+            margin-bottom: 30px; /* More space below title */
+            padding-bottom: 15px;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.2); /* Thicker, more defined separator */
+            letter-spacing: 0.05em; /* Slight letter spacing for impact */
+        }
+
+        /* Light mode specific adjustments for AI modal title */
+        [data-theme="light-pro"] #ai-modal-title {
+            text-shadow: none; /* No text shadow in light mode */
+            border-bottom-color: var(--border-color); /* Use light theme border color */
+        }
+
+        #ai-modal-content {
+            line-height: 1.8; /* Excellent line height for readability */
+            font-size: 1.08rem; /* Professional body text size */
+            color: var(--text-primary);
+            padding: 0 15px; /* Horizontal padding inside content area */
+        }
+
+        /* Styles for triple-asterisk headings (now rendered as h3 by parseAiResponseToHtml) */
+        #ai-modal-content h3 {
+            font-size: 1.6rem; /* Large and impactful subheadings */
+            font-family: var(--font-title); /* Use title font for hierarchy */
+            color: var(--accent-secondary); /* Using secondary accent for distinction */
+            margin-top: 2.2rem; /* More spacing above subheadings */
+            margin-bottom: 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* Clearer separator */
+            padding-bottom: 0.6rem;
+            text-shadow: 0 0 8px rgba(75, 121, 255, 0.3); /* More visible glow for subheadings */
+            letter-spacing: 0.03em;
+        }
+
+        /* Light mode specific adjustments for h3 */
+        [data-theme="light-pro"] #ai-modal-content h3 {
+            text-shadow: none; /* No text shadow */
+            border-bottom-color: var(--border-color);
+        }
+
+        /* Styles for double-asterisk bold text (rendered as strong, but within context often means a sub-sub-heading) */
+        #ai-modal-content strong {
+            display: block; /* Make strong elements act like block headings */
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 3px rgba(157, 99, 240, 0.2);
+        }
+
+        /* Light mode specific adjustments for strong tags */
+        [data-theme="light-pro"] #ai-modal-content strong {
+            text-shadow: none; /* No text shadow */
+        }
+
+
+        #ai-modal-content p {
+            margin-bottom: 1.5rem; /* More space after paragraphs */
+        }
+        
+        #ai-modal-content ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 2rem; /* More space after entire lists */
+        }
+
+        #ai-modal-content li {
+            background: rgba(255, 255, 255, 0.06); /* Slightly more visible background for list items */
+            padding: 18px 25px; /* More generous padding */
+            border-radius: 12px;
+            margin-bottom: 15px; /* Increased space between list items */
+            border-left: 6px solid var(--accent-primary); /* Thicker, more prominent primary accent border */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.25); /* More pronounced shadow */
+            transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1.25), box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+
+        /* Light mode specific adjustments for list items */
+        [data-theme="light-pro"] #ai-modal-content li {
+            background: #f8f9fa; /* Very light background for list items */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Lighter shadow */
+            border-left-color: var(--accent-primary); /* Keep accent color */
+        }
+
+        #ai-modal-content li:hover {
+            transform: translateX(10px); /* More noticeable slide on hover */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.35); /* Stronger shadow on hover */
+            border-left-color: var(--accent-secondary); /* Change border color on hover */
+        }
+
+        [data-theme="light-pro"] #ai-modal-content li:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* Lighter hover shadow */
+            border-left-color: var(--accent-secondary); /* Keep accent color */
+        }
+
+
+        #ai-modal .spinner {
+            border: 6px solid rgba(157, 99, 240, 0.5); /* Thicker, more prominent spinner border */
+            border-left-color: var(--accent-primary);
+            width: 70px; /* Even larger spinner */
+            height: 70px;
+            margin: 50px auto; /* More central and prominent */
+        }
+
+        /* Light mode specific adjustments for spinner */
+        [data-theme="light-pro"] #ai-modal .spinner {
+            border-color: rgba(79, 70, 229, 0.3); /* Lighter border color for spinner */
+        }
+
+
+        /* Close button adjustment for modals */
+        .modal-content .close-modal {
+            font-size: 2rem; /* Larger close button */
+            top: 18px; /* Adjust position */
+            right: 18px;
+            color: var(--text-secondary);
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .modal-content .close-modal:hover {
+            color: var(--danger);
+            transform: rotate(270deg) scale(1.3); /* More dramatic rotation and scale */
+        }
+
+        /* Light mode specific adjustments for close button */
+        [data-theme="light-pro"] .modal-content .close-modal {
+            color: var(--text-secondary); /* Ensure visibility in light mode */
+        }
+
+
     </style>
 </head>
 <body>
@@ -616,7 +992,7 @@
     </div>
     
     <div id="custom-prompt-modal" class="modal-overlay">
-         <div class="modal-content">
+           <div class="modal-content">
             <button class="close-modal">&times;</button>
             <h2>Email Reminder</h2>
             <p style="margin-bottom:20px; color: var(--text-secondary)">Enter the recipient's email address.</p>
@@ -625,6 +1001,24 @@
                 <button type="submit" class="add-task-btn" style="width:100%; margin-top:10px;">Send Reminder</button>
             </form>
         </div>
+    </div>
+
+    <!-- NEW: High-Alert Notification Modal HTML -->
+    <div id="high-alert-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="high-alert-title">Mission Critical</h2>
+            <p id="high-alert-task-name">Task Name Goes Here</p>
+            <p id="high-alert-message">This is the moment. High performers execute.</p>
+            <button id="high-alert-dismiss-btn">Acknowledge & Execute</button>
+        </div>
+    </div>
+
+    <!-- NEW: Professional Prompt Dialog HTML -->
+    <div id="custom-ai-prompt-dialog" class="prompt-dialog">
+        <p>Enter a high-level goal to get task suggestions:</p>
+        <input type="text" id="ai-goal-input" placeholder="e.g., Launch new product, improve personal health" required>
+        <button id="ai-prompt-ok-btn">OK</button>
+        <button id="ai-prompt-cancel-btn">Cancel</button>
     </div>
     
     <!-- JS Libraries -->
@@ -661,7 +1055,7 @@
                     this.tasks = JSON.parse(localStorage.getItem('matrixTasksV3')) || [];
                     const savedTheme = localStorage.getItem('matrixTheme') || 'dark-futuristic';
                     document.body.dataset.theme = savedTheme;
-                 },
+                   },
                 save() {
                     localStorage.setItem('matrixTasksV3', JSON.stringify(this.tasks));
                     app.ui.updateStatsDashboard();
@@ -720,7 +1114,7 @@
                         flatpickr(input, { 
                             enableTime: true,
                             dateFormat: "Y-m-d H:i",
-                         });
+                           });
                     });
                 },
                 createTaskElement(task) {
@@ -772,11 +1166,14 @@
                     document.getElementById('productivity-stat-value').textContent = `${productivity}%`;
                 },
                 parseAiResponseToHtml(text) {
-                    return text
-                        .replace(/\*\*(.*?)\*\*/g, '<h3>$1</h3>')
+                    // Enhanced parsing for top-level formatting:
+                    // Recognizes triple-asterisk for main headings, double-asterisk for subheadings.
+                    let html = text
+                        .replace(/\*\*\*(.*?)\*\*\*/g, '<h3>$1</h3>') // Convert triple-bold to h3 (used for main sections)
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Convert double-bold to strong (used for sub-titles or key phrases)
                         .split('\n')
                         .map(line => line.trim())
-                        .filter(line => line)
+                        .filter(line => line) // Remove empty lines
                         .map(line => {
                             if (line.startsWith('* ') || line.startsWith('- ')) {
                                 return `<li>${line.substring(2)}</li>`;
@@ -784,16 +1181,19 @@
                             if(line.match(/^\d+\.\s/)) {
                                 return `<li>${line.replace(/^\d+\.\s/, '')}</li>`;
                             }
-                            if(!line.startsWith('<h3>') && !line.startsWith('<li>')) {
+                            // If it's not a heading (h3) and not a list item, wrap in paragraph tags
+                            if(!line.startsWith('<h3') && !line.startsWith('<li') && !line.startsWith('<strong')) {
                                 return `<p>${line}</p>`;
                             }
                             return line;
                         })
-                        .join('')
-                        .replace(/<\/li><p>/g, '</li></ul><p>')
-                        .replace(/<\/h3><p>/g, '</h3><p>')
-                        .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-                        .replace(/<\/ul><ul>/g, '');
+                        .join('');
+                    
+                    // Wrap consecutive list items in a single <ul>.
+                    html = html.replace(/(<li>.*?<\/li>\s*)+/gs, '<ul>$&</ul>');
+                    html = html.replace(/<\/ul>\s*<ul>/g, ''); // Clean up accidental nested <ul> tags
+
+                    return html;
                 },
                 updateTitle(view) {
                     const baseTitle = "Project Hamzaifa v1.0";
@@ -825,6 +1225,27 @@
                         app.ui.closeModal(modalId);
                         if (modalId === 'focus-modal') app.focusMode.pause();
                     }));
+
+                    // Add event listener for the new High-Alert modal's dismiss button
+                    document.getElementById('high-alert-dismiss-btn').addEventListener('click', () => {
+                        app.ui.closeModal('high-alert-modal');
+                    });
+
+                    // Event listeners for the custom AI prompt dialog
+                    document.getElementById('ai-prompt-ok-btn').addEventListener('click', () => {
+                        const input = document.getElementById('ai-goal-input');
+                        if (input.checkValidity()) {
+                            app.gemini._resolveCustomPrompt(input.value);
+                            input.value = ''; // Clear input
+                        } else {
+                            input.reportValidity(); // Show browser validation message
+                        }
+                    });
+                    document.getElementById('ai-prompt-cancel-btn').addEventListener('click', () => {
+                        app.gemini._resolveCustomPrompt(null); // Resolve with null on cancel
+                        document.getElementById('ai-goal-input').value = ''; // Clear input
+                    });
+
 
                     const mainContent = document.querySelector('.main-content');
                     mainContent.addEventListener('dragstart', this.handleDragStart.bind(this));
@@ -880,7 +1301,8 @@
                         app.calendar.refresh();
                         input.value = '';
                     } else {
-                        alert("AI could not categorize this task. Please add it manually.");
+                        // Replaced alert with showAiModal for consistency and better styling
+                        app.ui.showAiModal("AI Error", "AI could not categorize this task. Please add it manually.");
                     }
                     app.ui.setLoadingButton(button, false);
                 },
@@ -937,44 +1359,71 @@
             };
             
             app.gemini = {
-                //
-// ... inside app.gemini ...
-//
-async _call(prompt) {
-    // The API URL is now your OWN serverless function
-    const apiUrl = `/api/gemini`; 
-    try {
-        // We now send the prompt in the body for our serverless function to use
-        const response = await fetch(apiUrl, { 
-            method: 'POST', 
-            headers: { 'Content-Type': 'application/json' }, 
-            body: JSON.stringify({ prompt: prompt }) // Pass the prompt in the body
-        });
-        
-        if (!response.ok) {
-            const errorResult = await response.json();
-            throw new Error(`API call failed: ${errorResult.message}`);
-        }
-        
-        const result = await response.json();
-        return result.candidates?.[0]?.content?.parts?.[0]?.text;
-    } catch (error) {
-        console.error('Error calling proxy API:', error);
-        app.ui.showAiModal("API Error", `Could not connect to the AI assistant. ${error.message}`);
-        return null;
-    }
-},
+                _customPromptResolver: null, // To store the Promise resolver
+                async _call(prompt) {
+                    const apiUrl = `${window.location.origin}/api/gemini`; 
+                    try {
+                        const response = await fetch(apiUrl, { 
+                            method: 'POST', 
+                            headers: { 'Content-Type': 'application/json' }, 
+                            body: JSON.stringify({ prompt: prompt })
+                        });
+                        
+                        if (!response.ok) {
+                            const errorResult = await response.json();
+                            throw new Error(`API call failed: ${errorResult.message}`);
+                        }
+                        
+                        const result = await response.json();
+                        return result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    } catch (error) {
+                        console.error('Error calling proxy API:', error);
+                        app.ui.showAiModal("API Error", `Could not connect to the AI assistant. ${error.message}`);
+                        return null;
+                    }
+                },
+                // New method to show custom prompt dialog
+                showCustomPrompt(message) {
+                    return new Promise((resolve) => {
+                        this._customPromptResolver = resolve;
+                        document.querySelector('#custom-ai-prompt-dialog p').textContent = message;
+                        document.getElementById('custom-ai-prompt-dialog').classList.add('active');
+                        document.getElementById('ai-goal-input').focus();
+                    });
+                },
+                // New method to resolve the custom prompt
+                _resolveCustomPrompt(value) {
+                    if (this._customPromptResolver) {
+                        this._customPromptResolver(value);
+                        document.getElementById('custom-ai-prompt-dialog').classList.remove('active');
+                        this._customPromptResolver = null;
+                    }
+                },
                 async categorizeTask(taskName) {
                     const prompt = `Analyze this task: "${taskName}". Which Eisenhower Matrix quadrant does it belong to? Respond with only the quadrant ID: "q1" (Urgent & Important), "q2" (Not Urgent & Important), "q3" (Urgent & Not Important), or "q4" (Not Urgent & Not Important).`;
                     const result = await this._call(prompt);
                     return result ? result.trim().toLowerCase().match(/q[1-4]/)?.[0] : null;
                 },
                 async suggestTasks(quadrantId) {
-                    const goal = window.prompt("Enter a high-level goal to get task suggestions for:");
-                    if (!goal) return;
+                    // Replaced window.prompt with custom modal
+                    const goal = await this.showCustomPrompt("Enter a high-level goal to get task suggestions:");
+                    
+                    if (!goal) return; // If user cancels the custom prompt, exit
+
                     const quadrantName = app.state.quadrantData.find(q => q.id === quadrantId).title;
                     app.ui.showAiModal("AI Suggestions", `<div class="spinner"></div>`);
-                    const apiPrompt = `Act as a strategic advisor. For the goal "${goal}", identify 3 high-leverage initiatives that fit the strategic purpose of the "${quadrantName}" quadrant. Provide only a simple, actionable list, each on a new line. No fluff.`;
+
+                    // ENHANCED AI PROMPT FOR LONGER AND MORE DETAILED RESPONSE WITH TOP-LEVEL FORMATTING
+                    const apiPrompt = `As a master strategist and productivity architect, for the high-level goal "${goal}", generate 5-7 highly specific, actionable, and high-leverage initiatives tailored for the "${quadrantName}" quadrant. For each initiative, provide:
+                    1. A concise, professional title (use **double-asterisk** for this title).
+                    2. A brief, impactful rationale explaining its strategic value.
+                    3. A clear, immediate next step to initiate progress.
+                    
+                    Format your response impeccably using markdown:
+                    - Start with a bold heading like "***Strategic Initiatives for ${goal}***".
+                    - Use bullet points for rationale and next steps, ensuring they are nested if a sub-point is needed.
+                    - Ensure every point is clear, aligned, and professional. Aim for a response that offers exceptional strategic depth and actionable guidance.`;
+                    
                     const result = await this._call(apiPrompt);
                     if (result) {
                         const htmlResult = app.ui.parseAiResponseToHtml(result);
@@ -983,7 +1432,7 @@ async _call(prompt) {
                 },
                 async breakdownTask(task) {
                     app.ui.showAiModal(`Decomposing "${task.name}"`, `<div class="spinner"></div>`);
-                    const result = await this._call(`Act as a top-tier operator with an IQ of 180. Decompose this mission: "${task.name}". Identify the first-principle action required to build momentum. Then, list the subsequent critical steps. Format using markdown with bold headings for sections and bullet points for steps. Be brutally honest and direct.`);
+                    const result = await this._call(`Act as a top-tier operator with an IQ of 180 and ruthless efficiency. Decompose this complex mission: "${task.name}". Identify the absolute first-principle action required to break inertia and build immediate momentum. Then, list 5-8 subsequent critical, atomic steps required for successful completion. For each step, provide a clear, concise instruction and why it's important. Format meticulously using markdown: use ***triple-asterisk*** for main section headings (e.g., "***First Principle Action***") and **double-asterisk** for sub-section headings (e.g., "**Why This Matters**"). Use detailed bullet points for steps. Be brutally honest, direct, and hyper-focused on practical execution.`);
                     if (result) {
                         const htmlResult = app.ui.parseAiResponseToHtml(result);
                         app.ui.showAiModal(`Mission Decomposition for "${task.name}"`, htmlResult);
@@ -993,10 +1442,15 @@ async _call(prompt) {
                     app.ui.showAiModal("Executive Briefing...", `<div class="spinner"></div>`);
                     const tasksString = app.state.tasks.filter(t => !t.completed).map(t => `- ${t.name} (Quadrant: ${t.quadrant})`).join('\n');
                     if (!tasksString) {
-                         app.ui.showAiModal("Your Day is Clear!", "You have no pending tasks. Great job! Time to relax or plan your next big goals.");
-                         return;
+                           app.ui.showAiModal("Your Day is Clear!", "You have no pending tasks. Great job! Time to relax or plan your next big goals.");
+                           return;
                     }
-                    const prompt = `As a strategic advisor with an IQ of 180, analyze my pending tasks. Provide a brutally honest "Executive Briefing" for today. Use markdown. The format must be: 1. **Top Priority:** The single most critical task that creates the most leverage. 2. **Next Actions:** A bulleted list of the next 2-3 important tasks. 3. **Strategic Focus:** A one-sentence directive for managing today's workload. My tasks:\n${tasksString}`;
+                    const prompt = `As a high-level strategic advisor, analyze my pending tasks. Provide a crisp, authoritative "Executive Briefing" for today. Use markdown for impeccable formatting. The structure must be: 
+                    1. ***Top Priority:*** The single, non-negotiable task that yields the most leverage, with a compelling justification and immediate next step.
+                    2. ***Immediate Next Actions:*** A bulleted list of the 3-5 most critical next steps to maintain momentum, ensuring variety across quadrants if applicable. Each action should be concise and highly actionable.
+                    3. ***Strategic Command:*** A powerful, one-sentence directive that encapsulates the core mindset for today's execution.
+                    
+                    My tasks:\n${tasksString}`;
                     const result = await this._call(prompt);
                     if (result) {
                         const htmlResult = app.ui.parseAiResponseToHtml(result);
@@ -1012,7 +1466,12 @@ async _call(prompt) {
                         return;
                     }
                     const completedTasksString = recentTasks.map(t => `- ${t.name} (Quadrant: ${t.quadrant})`).join('\n');
-                    const prompt = `Act as a brutally honest performance coach. I am providing a list of tasks I completed in the last 7 days. Analyze this data. Provide a concise After-Action Report (AAR) in markdown. The format must be: 1. **Where You Won:** Acknowledge the most significant completed task. 2. **Where You Hesitated:** Identify the patterns of procrastination or avoidance based on the types of tasks completed vs. what a high-performer would prioritize (i.e., Q2 tasks). 3. **Single Most Important Adjustment:** Provide one clear, actionable directive for the upcoming week to fix this pattern. Here are the completed tasks:\n${completedTasksString}`;
+                    const prompt = `Act as a brutally honest, elite performance coach. Review the following tasks completed in the last 7 days. Generate a comprehensive After-Action Report (AAR) in markdown, adhering to a professional tone and layout:
+                    1. ***Victories Achieved:*** Detail your top 2-3 most impactful accomplishments, explaining the strategic significance and lessons learned.
+                    2. ***Friction Points & Missed Opportunities:*** Identify specific patterns of procrastination or tasks (especially Q2 items) that were neglected. Provide a candid assessment of why these occurred and suggest actionable remedies.
+                    3. ***Strategic Calibration for Next Week:*** Propose the single most critical, actionable adjustment for the upcoming week. Justify this recommendation with data from your performance and explain how it will drive a tangible improvement in productivity and focus.
+                    
+                    Here are the completed tasks:\n${completedTasksString}`;
                     const result = await this._call(prompt);
                     if (result) {
                         const htmlResult = app.ui.parseAiResponseToHtml(result);
@@ -1171,7 +1630,7 @@ async _call(prompt) {
                     this.elements.timerDisplay.classList.remove('finished');
                     this.updateDisplay();
                 },
-                 setCustomTime() {
+                setCustomTime() {
                     const mins = parseInt(this.elements.customTimeInput.value, 10);
                     if (mins > 0) {
                         this.defaultTime = mins * 60;
@@ -1244,20 +1703,20 @@ async _call(prompt) {
                         leftOscillator.start();
                         rightOscillator.start();
                     } else if (type === 'rain' || type === 'forest' || type === 'cafe') {
-                         const bufferSize = this.audioContext.sampleRate * 4;
-                         const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
-                         const output = buffer.getChannelData(0);
-                         let lastOut = 0;
-                         for (let i = 0; i < bufferSize; i++) {
-                             let noise;
-                             if(type === 'rain') {
-                                 noise = Math.random() * 2 - 1;
-                             } else if (type === 'forest') {
-                                 let brown = (lastOut + (0.02 * (Math.random() * 2 - 1))) / 1.02;
-                                 lastOut = brown;
-                                 noise = brown * 3.5;
-                                 if(Math.random() > 0.995) noise = 1;
-                             } else { 
+                        const bufferSize = this.audioContext.sampleRate * 4;
+                        const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
+                        const output = buffer.getChannelData(0);
+                        let lastOut = 0;
+                        for (let i = 0; i < bufferSize; i++) {
+                            let noise;
+                            if(type === 'rain') {
+                                noise = Math.random() * 2 - 1;
+                            } else if (type === 'forest') {
+                                let brown = (lastOut + (0.02 * (Math.random() * 2 - 1))) / 1.02;
+                                lastOut = brown;
+                                noise = brown * 3.5;
+                                if(Math.random() > 0.995) noise = 1;
+                            } else { 
                                 let b0=0, b1=0, b2=0, b3=0, b4=0, b5=0, b6=0;
                                 let white = Math.random() * 2 - 1;
                                 b0 = 0.99886 * b0 + white * 0.0555179;
@@ -1268,18 +1727,18 @@ async _call(prompt) {
                                 b5 = -0.7616 * b5 - white * 0.0168980;
                                 noise = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
                                 b6 = white * 0.115926;
-                             }
-                             output[i] = noise;
-                         }
-                         this.soundSource = this.audioContext.createBufferSource();
-                         this.soundSource.buffer = buffer;
-                         this.soundSource.loop = true;
-                         this.soundSource.connect(this.gainNode);
-                         this.soundSource.start();
+                            }
+                            output[i] = noise;
+                        }
+                        this.soundSource = this.audioContext.createBufferSource();
+                        this.soundSource.buffer = buffer;
+                        this.soundSource.loop = true;
+                        this.soundSource.connect(this.gainNode);
+                        this.soundSource.start();
                     }
                 },
                 stopSound() {
-                     if (this.soundSource) {
+                    if (this.soundSource) {
                         if (this.soundSource.merger) {
                             this.soundSource.left.stop();
                             this.soundSource.right.stop();
@@ -1333,18 +1792,16 @@ async _call(prompt) {
             };
 
             app.notifications = {
-                // Define the check interval in milliseconds. 5000ms = 5 seconds.
                 checkInterval: 5000, 
                 init() {
+                    // Re-add the permission request for browser notifications.
                     if ("Notification" in window) {
                         if(Notification.permission !== 'granted' && Notification.permission !== 'denied') {
-                            // Request permission after a small delay
                             setTimeout(() => {
                                 Notification.requestPermission();
                             }, 5000);
                         }
                     }
-                    // Check for notifications more frequently to avoid delays.
                     setInterval(this.checkAndSend.bind(this), this.checkInterval); 
                 },
                 toggle(taskId, button) {
@@ -1357,27 +1814,47 @@ async _call(prompt) {
                 checkAndSend() {
                     const now = new Date();
                     app.state.tasks.forEach(task => {
-                        if (task.notificationsEnabled && !task.completed && task.dueDate) {
+                        const isAlertActive = document.getElementById('high-alert-modal').classList.contains('active');
+                        if (task.notificationsEnabled && !task.completed && task.dueDate && !isAlertActive) {
                             const dueDate = new Date(task.dueDate);
-                            // Check if the task was due within the last check interval window.
-                            // This prevents sending notifications multiple times for the same task.
                             if (now >= dueDate && (now - dueDate < this.checkInterval)) { 
+                                // The checkAndSend loop now triggers the standard browser notification.
                                 this.sendDesktopNotification(task);
                             }
                         }
                     });
                 },
+                // This function now shows the "High-Alert" modal inside the app.
+                async showHighAlert(task) {
+                    const message = await app.gemini._call(`Generate a short, brutally honest notification body for this urgent task: "${task.name}". Remind the user that high-performers execute.`);
+                    
+                    document.getElementById('high-alert-task-name').textContent = task.name;
+                    document.getElementById('high-alert-message').textContent = message || "The time for action is now. Execute.";
+                    
+                    app.ui.showModal('high-alert-modal');
+                    app.focusMode.playNotificationSound();
+                },
+                // This function creates the standard browser notification.
                 async sendDesktopNotification(task) {
                      if (!("Notification" in window) || Notification.permission !== "granted") {
-                        return; // Cannot send notification if permission is not granted.
+                        // If permission isn't granted, fall back to the in-app modal directly.
+                        this.showHighAlert(task);
+                        return;
                     }
-                    const body = await app.gemini._call(`Generate a short, brutally honest notification body for this urgent task: "${task.name}". Remind the user that high-performers execute.`);
-                    new Notification(`Task Due: ${task.name}`, {
-                        body: body || "The time for action is now. Execute.",
+
+                    const body = `It's time. Click here to focus and execute.`;
+                    const notification = new Notification(`Task Due: ${task.name}`, {
+                        body: body,
                         icon: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><path fill=%22%239d63f0%22 d=%22M50 0 L100 50 L50 100 L0 50 Z%22/></svg>",
-                        // This property makes the notification stay on screen until the user interacts with it.
                         requireInteraction: true 
                     });
+
+                    // When the browser notification is clicked, it focuses the window and shows the high-alert modal.
+                    notification.onclick = () => {
+                        window.focus();
+                        this.showHighAlert(task);
+                        notification.close();
+                    };
                 },
                 sendWhatsApp(task) { window.open(`https://wa.me/?text=${encodeURIComponent(`*Task Reminder:*\n${task.name}`)}`, '_blank'); },
                 sendToGoogleCalendar(task) {
@@ -1467,12 +1944,16 @@ async _call(prompt) {
                 },
                 openPrompt(task) {
                     if (!this.isConfigured) {
-                        alert("Email notifications have not been set up. Please see the comments in the script to configure your free EmailJS account.");
+                        // Replaced alert with showAiModal for consistency and better styling
+                        app.ui.showAiModal("Email Setup Required", "Email notifications have not been set up. Please see the comments in the script to configure your free EmailJS account.");
                         return;
                     }
                     this.currentTask = task;
                     app.ui.showModal('custom-prompt-modal');
-                    document.getElementById('email-prompt-form').addEventListener('submit', this.handlePromptSubmit.bind(this), {once: true});
+                    // Ensure the event listener is only added once
+                    const emailForm = document.getElementById('email-prompt-form');
+                    emailForm.removeEventListener('submit', this.handlePromptSubmit.bind(this)); // Remove previous listener
+                    emailForm.addEventListener('submit', this.handlePromptSubmit.bind(this), {once: true});
                 },
                 handlePromptSubmit(e) {
                     e.preventDefault();
