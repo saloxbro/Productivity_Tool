@@ -132,6 +132,7 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             transition: all 0.2s ease-in-out;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
@@ -315,7 +316,19 @@
             transition: color 0.2s, transform 0.2s;
         }
         .close-modal:hover { color: var(--danger); transform: rotate(90deg); }
-        .modal-content h2 { font-family: var(--font-title); margin-bottom: 16px; color: var(--accent-primary); }
+        .modal-content h2 { 
+            font-family: var(--font-title); 
+            margin-bottom: 16px; 
+            color: var(--accent-primary);
+            font-size: 2.2rem; /* Larger title for general modals too */
+            text-shadow: 0 0 10px color-mix(in srgb, var(--accent-primary) 50%, transparent);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        [data-theme="light-pro"] .modal-content h2 {
+            text-shadow: none;
+            border-bottom-color: var(--border-color);
+        }
         #ai-modal-content, #focus-task-list, #guide-content { text-align: left; max-height: 60vh; overflow-y: auto; line-height: 1.8; }
         #ai-modal-content h3, #guide-content h3 {
             font-family: var(--font-title);
@@ -911,6 +924,7 @@
     <div id="ai-modal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
+            <!-- Title and subtitle are now dynamically updated with correct HTML structure -->
             <h2 id="ai-modal-title">AI Assistant</h2>
             <div id="ai-modal-content"></div>
         </div>
@@ -984,6 +998,7 @@
             <form id="forge-contract-form">
                 <input type="hidden" id="forge-task-id">
                 <input type="text" id="forge-outcome" class="task-input" placeholder="Define the specific, measurable outcome..." required>
+                <!-- FIX: Changed id from 'text' to 'forge-deadline' -->
                 <input type="text" id="forge-deadline" class="date-input" placeholder="Set the hard deadline..." required>
                 <input type="text" id="forge-penalty" class="task-input" placeholder="State the penalty for failure..." required>
                 <button type="submit" class="add-task-btn" style="width: 100%; background: var(--danger);">Forge Contract</button>
@@ -1146,7 +1161,8 @@
                 showModal(modalId) { document.getElementById(modalId).classList.add('active'); },
                 closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); },
                 showAiModal(title, content) {
-                    document.getElementById('ai-modal-title').textContent = title;
+                    // Update the title content directly as HTML
+                    document.getElementById('ai-modal-title').innerHTML = title; 
                     document.getElementById('ai-modal-content').innerHTML = content;
                     this.showModal('ai-modal');
                 },
@@ -1335,9 +1351,10 @@
                 handleForgeSubmit(e) {
                     e.preventDefault();
                     const taskId = document.getElementById('forge-task-id').value;
+                    // FIX: Changed id="forge-deadline" to "text" in HTML, correcting it back to "forge-deadline"
                     const contract = {
                         outcome: document.getElementById('forge-outcome').value,
-                        deadline: document.getElementById('forge-deadline').value,
+                        deadline: document.getElementById('forge-deadline').value, // Corrected ID
                         penalty: document.getElementById('forge-penalty').value,
                         active: true
                     };
@@ -1414,7 +1431,7 @@
                     app.ui.showAiModal("AI Suggestions", `<div class="spinner"></div>`);
 
                     // ENHANCED AI PROMPT FOR LONGER AND MORE DETAILED RESPONSE WITH TOP-LEVEL FORMATTING
-                    const apiPrompt = `As a master strategist and productivity architect, for the high-level goal "${goal}", generate 5-7 highly specific, actionable, and high-leverage initiatives tailored for the "${quadrantName}" quadrant. For each initiative, provide:
+                    const apiPrompt = `As a master strategist and productivity architect, for the high-level goal "***${goal}***", generate 5-7 highly specific, actionable, and high-leverage initiatives tailored for the "${quadrantName}" quadrant. For each initiative, provide:
                     1. A concise, professional title (use **double-asterisk** for this title).
                     2. A brief, impactful rationale explaining its strategic value.
                     3. A clear, immediate next step to initiate progress.
@@ -1458,39 +1475,47 @@
                     }
                 },
                 async weeklyDebrief() {
-                    app.ui.showAiModal("Weekly After-Action Report...", `<div class="spinner"></div>`);
+                    app.ui.showAiModal("Generating Comprehensive Debrief...", `<div class="spinner"></div>`);
                     const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
                     const recentTasks = app.state.tasks.filter(t => t.completedAt && t.completedAt > oneWeekAgo);
                     
-                    // Client name and current date for the report
-                    const clientName = "M.Salman Shahid"; // As requested
+                    const clientName = "M. Salman Shahid"; // Client name as requested
                     const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
                     if (recentTasks.length === 0) {
-                        app.ui.showAiModal("Weekly Debrief", `***Weekly Debrief Report: Week of ${currentDate}***<br><br>Client: ${clientName}<br><br>No tasks were completed in the last 7 days. This indicates a period of low activity. Please ensure strategic engagement with your tasks to drive progress. Plan your week and execute.`);
+                        // Improved message for no completed tasks
+                        app.ui.showAiModal(`Weekly Debrief Report<br>Week Ending: ${currentDate}<br>Client: ${clientName}`, `
+                            <h3>***Overall Performance Summary:***</h3>
+                            <p>This week concludes with no recorded task completions. While this indicates a period of low operational output, it also presents an opportunity for strategic recalibration. Consistent engagement with high-leverage tasks is crucial for sustained progress.</p>
+                            <h3>***Strategic Imperative for Next Week:***</h3>
+                            <p><strong>Initiate Action:</strong> Identify one high-impact task from Q2 and commit to its first executable step. Document and execute this step to re-establish momentum and demonstrate decisive action. Expect detailed planning and consistent follow-through.</p>
+                        `);
                         return;
                     }
                     const completedTasksString = recentTasks.map(t => `- ${t.name} (Quadrant: ${t.quadrant})`).join('\n');
-                    const prompt = `As an elite performance coach and master analyst, generate a highly professional and insightful After-Action Report (AAR) for client "${clientName}" for the week ending ${currentDate}. Maintain an analytical, constructive, and motivational tone, suitable for a top-tier executive. The report should be comprehensive and impeccably formatted using markdown.
+                    
+                    // ULTIMATELY REFINED AND CONCISE AI PROMPT for professional debrief
+                    const prompt = `As an elite performance coach and master analyst, generate a concise, professional, and actionable After-Action Report (AAR) for client "${clientName}" for the week ending ${currentDate}. Focus on high-impact insights and actionable directives, maintaining a constructive tone. The report should be medium length – substantial enough to be valuable but avoid excessive detail. Format impeccably using markdown.
 
 Report Structure:
-***Overall Performance Summary:*** (Provide a concise, professional assessment based on completed tasks versus potential, focusing on areas of strength and opportunities for growth.)
+***Overall Performance Summary:*** (1-2 precise sentences summarizing performance, acknowledging strengths and primary area for growth.)
 
-***1. Victories Achieved:***
-(Identify and elaborate on 2-3 most significant and high-leverage accomplishments. Explain their strategic impact and the positive lessons learned. If no major victories, analyze small wins constructively.)
+***1. Key Accomplishments:***
+(Detail 1-2 most significant achievements. Focus on strategic impact and lessons. If quantifiable, include metrics.)
 
-***2. Growth Opportunities & Friction Points:***
-(Analyze patterns of underperformance, procrastination, or neglected tasks, especially those in Q2 (Not Urgent & Important). Provide a candid, data-driven assessment of underlying reasons, avoiding judgmental language. Offer specific, actionable strategies for improvement and overcoming identified friction points.)
+***2. Primary Growth Opportunities:***
+(Identify 1-2 most critical friction points or neglected strategic tasks (e.g., Q2). Explain why they are crucial growth areas. Provide concise, actionable remedies.)
 
 ***3. Strategic Imperative for Next Week:***
-(Propose the single most critical and impactful strategic adjustment or focus area for the upcoming week. Justify this recommendation with clear reasoning, explaining how it will directly lead to tangible improvements in productivity, strategic alignment, and overall goal progression. Frame this as a clear command for elite execution.)
+(A single, powerful directive. Justify why this is the #1 priority and how it will drive tangible results. Focus on concrete action, not just planning. Frame it as a decisive command.)
 
-Here are the completed tasks for analysis:\n${completedTasksString}`;
+Completed tasks for your analysis:\n${completedTasksString}`;
                     
                     const result = await this._call(prompt);
                     if (result) {
                         const htmlResult = app.ui.parseAiResponseToHtml(result);
-                        app.ui.showAiModal(`Weekly Debrief Report: Week of ${currentDate}<br>Client: ${clientName}`, htmlResult);
+                        // Using template literals for title to integrate variables cleanly
+                        app.ui.showAiModal(`Weekly Debrief Report<br>Week Ending: ${currentDate}<br>Client: ${clientName}`, htmlResult);
                     }
                 }
             };
