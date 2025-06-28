@@ -1461,21 +1461,36 @@
                     app.ui.showAiModal("Weekly After-Action Report...", `<div class="spinner"></div>`);
                     const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
                     const recentTasks = app.state.tasks.filter(t => t.completedAt && t.completedAt > oneWeekAgo);
+                    
+                    // Client name and current date for the report
+                    const clientName = "M.Salman Shahid"; // As requested
+                    const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
                     if (recentTasks.length === 0) {
-                        app.ui.showAiModal("Weekly Debrief", "No tasks were completed in the last 7 days. Plan your week and execute.");
+                        app.ui.showAiModal("Weekly Debrief", `***Weekly Debrief Report: Week of ${currentDate}***<br><br>Client: ${clientName}<br><br>No tasks were completed in the last 7 days. This indicates a period of low activity. Please ensure strategic engagement with your tasks to drive progress. Plan your week and execute.`);
                         return;
                     }
                     const completedTasksString = recentTasks.map(t => `- ${t.name} (Quadrant: ${t.quadrant})`).join('\n');
-                    const prompt = `Act as a brutally honest, elite performance coach. Review the following tasks completed in the last 7 days. Generate a comprehensive After-Action Report (AAR) in markdown, adhering to a professional tone and layout:
-                    1. ***Victories Achieved:*** Detail your top 2-3 most impactful accomplishments, explaining the strategic significance and lessons learned.
-                    2. ***Friction Points & Missed Opportunities:*** Identify specific patterns of procrastination or tasks (especially Q2 items) that were neglected. Provide a candid assessment of why these occurred and suggest actionable remedies.
-                    3. ***Strategic Calibration for Next Week:*** Propose the single most critical, actionable adjustment for the upcoming week. Justify this recommendation with data from your performance and explain how it will drive a tangible improvement in productivity and focus.
+                    const prompt = `As an elite performance coach and master analyst, generate a highly professional and insightful After-Action Report (AAR) for client "${clientName}" for the week ending ${currentDate}. Maintain an analytical, constructive, and motivational tone, suitable for a top-tier executive. The report should be comprehensive and impeccably formatted using markdown.
+
+Report Structure:
+***Overall Performance Summary:*** (Provide a concise, professional assessment based on completed tasks versus potential, focusing on areas of strength and opportunities for growth.)
+
+***1. Victories Achieved:***
+(Identify and elaborate on 2-3 most significant and high-leverage accomplishments. Explain their strategic impact and the positive lessons learned. If no major victories, analyze small wins constructively.)
+
+***2. Growth Opportunities & Friction Points:***
+(Analyze patterns of underperformance, procrastination, or neglected tasks, especially those in Q2 (Not Urgent & Important). Provide a candid, data-driven assessment of underlying reasons, avoiding judgmental language. Offer specific, actionable strategies for improvement and overcoming identified friction points.)
+
+***3. Strategic Imperative for Next Week:***
+(Propose the single most critical and impactful strategic adjustment or focus area for the upcoming week. Justify this recommendation with clear reasoning, explaining how it will directly lead to tangible improvements in productivity, strategic alignment, and overall goal progression. Frame this as a clear command for elite execution.)
+
+Here are the completed tasks for analysis:\n${completedTasksString}`;
                     
-                    Here are the completed tasks:\n${completedTasksString}`;
                     const result = await this._call(prompt);
                     if (result) {
                         const htmlResult = app.ui.parseAiResponseToHtml(result);
-                        app.ui.showAiModal("Weekly Debrief", htmlResult);
+                        app.ui.showAiModal(`Weekly Debrief Report: Week of ${currentDate}<br>Client: ${clientName}`, htmlResult);
                     }
                 }
             };
