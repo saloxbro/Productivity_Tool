@@ -1333,15 +1333,19 @@ async _call(prompt) {
             };
 
             app.notifications = {
+                // Define the check interval in milliseconds. 5000ms = 5 seconds.
+                checkInterval: 5000, 
                 init() {
                     if ("Notification" in window) {
                         if(Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+                            // Request permission after a small delay
                             setTimeout(() => {
                                 Notification.requestPermission();
                             }, 5000);
                         }
                     }
-                    setInterval(this.checkAndSend.bind(this), 60000); // Check every minute
+                    // Check for notifications more frequently to avoid delays.
+                    setInterval(this.checkAndSend.bind(this), this.checkInterval); 
                 },
                 toggle(taskId, button) {
                     const task = app.state.getTaskById(taskId);
@@ -1355,7 +1359,9 @@ async _call(prompt) {
                     app.state.tasks.forEach(task => {
                         if (task.notificationsEnabled && !task.completed && task.dueDate) {
                             const dueDate = new Date(task.dueDate);
-                            if (now >= dueDate && (now - dueDate < 60000)) { // If due within the last minute
+                            // Check if the task was due within the last check interval window.
+                            // This prevents sending notifications multiple times for the same task.
+                            if (now >= dueDate && (now - dueDate < this.checkInterval)) { 
                                 this.sendDesktopNotification(task);
                             }
                         }
@@ -1363,12 +1369,14 @@ async _call(prompt) {
                 },
                 async sendDesktopNotification(task) {
                      if (!("Notification" in window) || Notification.permission !== "granted") {
-                        return; // Cannot send notification
+                        return; // Cannot send notification if permission is not granted.
                     }
                     const body = await app.gemini._call(`Generate a short, brutally honest notification body for this urgent task: "${task.name}". Remind the user that high-performers execute.`);
                     new Notification(`Task Due: ${task.name}`, {
                         body: body || "The time for action is now. Execute.",
-                        icon: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><path fill=%22%239d63f0%22 d=%22M50 0 L100 50 L50 100 L0 50 Z%22/></svg>"
+                        icon: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><path fill=%22%239d63f0%22 d=%22M50 0 L100 50 L50 100 L0 50 Z%22/></svg>",
+                        // This property makes the notification stay on screen until the user interacts with it.
+                        requireInteraction: true 
                     });
                 },
                 sendWhatsApp(task) { window.open(`https://wa.me/?text=${encodeURIComponent(`*Task Reminder:*\n${task.name}`)}`, '_blank'); },
