@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Hamzaifa v1.0 | Salman Shahid</title>
+    
+    <!-- Custom Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><path fill=%22%239d63f0%22 d=%22M50 0 L100 50 L50 100 L0 50 Z%22/></svg>">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;800&display=swap" rel="stylesheet">
+    
+    <!-- Flatpickr Calendar CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <style>
+        :root, [data-theme="dark-futuristic"] {
+            --primary-glow: 0 0 15px rgba(138, 43, 226, 0.5), 0 0 5px rgba(138, 43, 226, 0.7);
+            --bg: #10101a;
+            --bg-light: rgba(23, 23, 38, 0.5);
+            --bg-glass: rgba(23, 23, 38, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a0b5;
+            --accent-primary: #9d63f0;
+            --accent-secondary: #4b79ff;
+            --danger: #ff4d4d;
+            --success: #34d399;
+            --warning: #ffc400;
+            --gcal-color: #4285F4;
+            --radius: 12px;
+            --font-body: 'Inter', sans-serif;
+            --font-title: 'Orbitron', 'Inter', sans-serif;
+        }
+
+        [data-theme="light-pro"] {
+            --bg: #f4f7fa;
+            --bg-light: #ffffff;
+            --bg-glass: rgba(255, 255, 255, 0.8);
+            --border-color: #e2e8f0;
+            --text-primary: #1a202c;
+            --text-secondary: #718096;
+            --accent-primary: #4f46e5;
+            --accent-secondary: #3b82f6;
+            --danger: #e53e3e;
+            --success: #38a169;
+            --warning: #dd6b20;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            padding: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        [data-theme="dark-futuristic"] body {
+             background-image: radial-gradient(circle at 1% 1%, rgba(157, 99, 240, 0.15) 0%, transparent 50%),
+                              radial-gradient(circle at 99% 99%, rgba(75, 121, 255, 0.15) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* --- Main Layout --- */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* --- Header --- */
+        header {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        
+        .header-title {
+            font-family: var(--font-title);
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 800;
+            color: var(--accent-primary);
+            text-shadow: 0 0 8px color-mix(in srgb, var(--accent-primary) 50%, transparent);
+        }
+        
+        .header-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+
+        .control-btn {
+            background: linear-gradient(45deg, var(--accent-secondary), var(--accent-primary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .control-btn:hover, .control-btn.active {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px color-mix(in srgb, var(--accent-primary) 40%, transparent);
+        }
+        
+        .smart-add-form { display: flex; gap: 10px; margin-top: 20px; }
+        #smart-add-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--bg);
+            color: var(--text-primary);
+        }
+        #smart-add-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 30%, transparent);
+        }
+
+        /* --- Main Content View --- */
+        .main-content {
+            display: grid; /* Grid is used by both matrix and calendar */
+        }
+        
+        /* --- Matrix View --- */
+        .matrix-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
+            width: 100%;
+        }
+
+        .quadrant {
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: all 0.3s ease;
+        }
+        .quadrant:hover { transform: translateY(-4px); border-color: var(--accent-primary); }
+
+        #q1 { border-top: 4px solid var(--danger); }
+        #q2 { border-top: 4px solid var(--accent-primary); }
+        #q3 { border-top: 4px solid var(--warning); }
+        #q4 { border-top: 4px solid var(--success); }
+
+        .quadrant-header { text-align: center; }
+        .quadrant-header h2 { font-family: var(--font-title); font-size: 1.25rem; color: var(--text-primary); }
+        .quadrant-subtitle { font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* --- Forms & Inputs --- */
+        .task-form { display: flex; flex-wrap: wrap; gap: 8px; }
+        .task-input { flex-grow: 1; }
+        .date-input { flex-basis: 170px; } /* Increased width for time */
+        .add-task-btn { flex-shrink: 0; }
+        .task-input, .date-input, #email-prompt-input {
+            height: 40px;
+            padding: 10px; border: 1px solid var(--border-color); border-radius: 8px;
+            font-size: 0.95rem; background: var(--bg-light); color: var(--text-primary);
+        }
+        #forge-contract-form input, #email-prompt-form input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .add-task-btn, .ai-suggest-btn {
+            background: var(--accent-primary); color: white; border: none; border-radius: 8px;
+            padding: 10px; font-weight: 600; cursor: pointer; transition: background 0.2s;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+         .add-task-btn {
+            padding: 10px 12px;
+        }
+        .add-task-btn:hover { background: color-mix(in srgb, var(--accent-primary) 80%, black); }
+        .ai-suggest-btn {
+            background: linear-gradient(45deg, var(--accent-secondary), var(--accent-primary));
+            width: 100%; /* Make this button full width */
+        }
+
+        /* --- Task List --- */
+        .task-list { list-style: none; flex-grow: 1; min-height: 150px; }
+        .task-item {
+            background: var(--bg-light);
+            padding: 12px; margin-bottom: 10px; border-radius: 8px;
+            border-left: 4px solid var(--accent-primary);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: grab; transition: all 0.2s ease;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .task-item.forged {
+            border: 2px solid var(--danger);
+            box-shadow: 0 0 15px color-mix(in srgb, var(--danger) 50%, transparent);
+        }
+        .task-item:hover { transform: translateX(4px); border-left-color: var(--accent-secondary); }
+        .task-item.completed { opacity: 0.5; }
+        .task-item.completed .task-name { text-decoration: line-through; }
+        .task-item-content { display: flex; justify-content: space-between; align-items: center; }
+        .task-details { display: flex; align-items: center; gap: 12px; overflow: hidden; }
+        .task-name { font-weight: 500; word-break: break-word; }
+        .task-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-color);
+            font-size: 0.8rem; color: var(--text-secondary);
+        }
+        .task-due-date i { margin-right: 5px; }
+        .task-actions { display: flex; gap: 8px; }
+        .task-actions button {
+            background: none; border: none; color: var(--text-secondary);
+            font-size: 1rem; cursor: pointer; transition: color 0.2s, transform 0.2s;
+        }
+        .task-actions button:disabled { color: var(--border-color); cursor: not-allowed; }
+        .task-actions button:disabled:hover { transform: none; }
+        .task-actions button:hover { transform: scale(1.2); }
+        .task-actions .delete-task-btn:hover { color: var(--danger); }
+        .task-actions .ai-breakdown-btn:hover { color: var(--accent-primary); }
+        .task-actions .forge-btn:hover { color: var(--danger); }
+        .task-actions .whatsapp-btn:hover { color: #25D366; }
+        .task-actions .email-btn:hover { color: var(--warning); }
+        .task-actions .gcal-btn:hover { color: var(--gcal-color); }
+        .task-actions .notification-btn.active { color: var(--success); }
+
+        /* --- Modals --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 20, 0.6); backdrop-filter: blur(15px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s;
+        }
+        [data-theme="light-pro"] .modal-overlay {
+            background: rgba(255, 255, 255, 0.6);
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 32px; max-width: 600px; width: 90%;
+            text-align: center; box-shadow: 0 4px 30px rgba(0,0,0,0.2);
+            transform: scale(0.95); transition: transform 0.3s ease;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+        .close-modal {
+            position: absolute; top: 10px; right: 10px; background: none; border: none;
+            color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+        }
+        .close-modal:hover { color: var(--danger); transform: rotate(90deg); }
+        .modal-content h2 { font-family: var(--font-title); margin-bottom: 16px; color: var(--accent-primary); }
+        #ai-modal-content, #focus-task-list, #guide-content { text-align: left; max-height: 60vh; overflow-y: auto; line-height: 1.8; }
+        #ai-modal-content h3, #guide-content h3 {
+            font-family: var(--font-title);
+            color: var(--accent-primary);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.25rem;
+        }
+        #ai-modal-content ul, #guide-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        #ai-modal-content li, #guide-content li {
+            background: var(--bg);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 3px solid var(--accent-secondary);
+        }
+        
+        /* --- Focus Mode Modal --- */
+        #focus-timer {
+            font-family: var(--font-title);
+            font-size: clamp(3.5rem, 15vw, 5rem);
+            margin: 20px 0;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        #focus-timer.finished {
+            color: var(--success);
+            transform: scale(1.1);
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse { 0% { text-shadow: 0 0 5px var(--success); } 50% { text-shadow: 0 0 20px var(--success); } 100% { text-shadow: 0 0 5px var(--success); } }
+
+        #focus-task-name {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            min-height: 2rem;
+        }
+        .timer-controls { display: flex; justify-content: center; gap: 16px; margin-bottom: 20px;}
+        .timer-controls button {
+            background: var(--accent-primary); color: white; border: none; border-radius: 50%;
+            width: 50px; height: 50px; font-size: 1.2rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .timer-controls button:hover { background: color-mix(in srgb, var(--accent-primary) 80%, black); transform: scale(1.1); }
+        
+        .custom-time-form { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
+        #custom-time-input {
+            width: 80px; text-align: center;
+        }
+        
+        /* --- Focus Sanctuary --- */
+        .soundscape-controls {
+            margin-top: 20px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+        .soundscape-controls h3 {
+            font-family: var(--font-title);
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        .sound-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+        .sound-btn {
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .sound-btn.active {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        /* --- Calendar View --- */
+        .calendar-container {
+            background: var(--bg-glass); backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color); border-radius: var(--radius);
+            padding: 24px; display: none; /* Hidden by default */
+        }
+        #calendar { margin-bottom: 20px; }
+        .weekly-agenda {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+        .day-column {
+            background: var(--bg-light);
+            border-radius: var(--radius);
+            padding: 10px;
+        }
+        .day-header {
+            font-family: var(--font-title);
+            font-size: 1rem;
+            text-align: center;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--accent-primary);
+        }
+        .day-column .task-item {
+            font-size: 0.9rem;
+            padding: 8px;
+        }
+        .day-column .task-item .task-footer {
+            font-size: 0.7rem;
+            margin-top: 5px;
+            padding-top: 5px;
+        }
+
+        /* --- Flatpickr Theme Overrides --- */
+        .flatpickr-calendar {
+            background: var(--bg) !important;
+            border: 1px solid var(--border-color) !important;
+            color: var(--text-primary) !important;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3) !important;
+        }
+        .flatpickr-day.today { border-color: var(--accent-primary); color: var(--accent-primary) !important; }
+        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day:hover, .flatpickr-day:focus {
+            background: var(--accent-primary) !important; border-color: var(--accent-primary) !important;
+            color: white !important;
+        }
+        .flatpickr-weekday, .flatpickr-monthDropdown-month, .numInput, .flatpickr-current-month, .flatpickr-time, .flatpickr-am-pm {
+            color: var(--text-primary) !important;
+        }
+        .numInput { background: var(--bg-light) !important; }
+        .flatpickr-months .flatpickr-prev-month, .flatpickr-months .flatpickr-next-month {
+            fill: var(--text-primary) !important;
+        }
+        
+        /* --- Stats Dashboard --- */
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .stat-card {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-card h3 {
+            font-family: var(--font-title);
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        #productivity-stat .value {
+            color: var(--success);
+        }
+
+        /* --- Animations & Helpers --- */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .spinner {
+            border: 4px solid var(--border-color); width: 40px; height: 40px; border-radius: 50%;
+            border-left-color: var(--accent-primary); animation: spin 1s ease infinite; margin: 20px auto;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .hidden { display: none !important; }
+
+        @media (max-width: 768px) {
+            body { padding: 8px; }
+            .header-top, .header-controls { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <header>
+            <div class="header-top">
+                <h1 class="header-title">Project Hamzaifa v1.0</h1>
+                <div class="header-controls">
+                    <button id="theme-toggle-btn" class="control-btn" title="Toggle Theme"><i class="fas fa-palette"></i></button>
+                    <button id="matrix-view-btn" class="control-btn active"><i class="fas fa-th-large"></i> Matrix</button>
+                    <button id="calendar-view-btn" class="control-btn"><i class="fas fa-calendar-alt"></i> Calendar</button>
+                    <button id="focus-mode-btn" class="control-btn"><i class="fas fa-bullseye"></i> Focus</button>
+                    <button id="weekly-debrief-btn" class="control-btn"><i class="fas fa-chart-line"></i> Debrief</button>
+                    <button id="plan-my-day-btn" class="control-btn"><i class="fas fa-robot"></i> Mission Brief</button>
+                    <button id="pdf-export-btn" class="control-btn"><i class="fas fa-file-pdf"></i> Generate Report</button>
+                    <button id="guide-btn" class="control-btn"><i class="fas fa-question-circle"></i> Guide</button>
+                </div>
+            </div>
+            <form class="smart-add-form" id="smart-add-form">
+                <input type="text" id="smart-add-input" placeholder="Enter a task and let AI prioritize it..." required>
+                <button type="submit" class="add-task-btn" title="Let AI prioritize and add this task">✨ AI Prioritize</button>
+            </form>
+        </header>
+
+        <main class="main-content">
+            <div class="matrix-container" id="matrix-container">
+                <!-- Quadrants will be dynamically inserted here -->
+            </div>
+            <div class="calendar-container hidden" id="calendar-container">
+                <div id="calendar"></div>
+                <div class="weekly-agenda" id="weekly-agenda"></div>
+            </div>
+        </main>
+
+        <div class="stats-dashboard" id="stats-dashboard">
+             <div class="stat-card">
+                <h3>Total Tasks</h3>
+                <p class="value" id="total-tasks-stat">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Completed</h3>
+                <p class="value" id="completed-tasks-stat">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Pending</h3>
+                <p class="value" id="pending-tasks-stat">0</p>
+            </div>
+            <div class="stat-card" id="productivity-stat">
+                <h3>Productivity</h3>
+                <p class="value" id="productivity-stat-value">0%</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="ai-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2 id="ai-modal-title">AI Assistant</h2>
+            <div id="ai-modal-content"></div>
+        </div>
+    </div>
+
+    <div id="guide-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2>System Guide</h2>
+            <div id="guide-content">
+                <h3>Core Components</h3>
+                <ul>
+                    <li><strong>The Matrix:</strong> The system's foundation. It forces you to categorize every task by urgency and importance, eliminating trivialities and focusing you on what truly matters.</li>
+                    <li><strong>Productivity Dashboard:</strong> Your real-time performance metrics. It provides an unblinking, data-driven view of your output and efficiency.</li>
+                </ul>
+
+                <h3>Strategic AI Tools</h3>
+                <ul>
+                    <li><strong>AI Prioritize:</strong> The input field in the header. It eliminates decision fatigue by using AI to analyze and automatically sort new tasks into the correct quadrant.</li>
+                    <li><strong>Mission Brief:</strong> Generates a daily strategic overview. It analyzes all pending tasks and provides a brutally honest briefing on your Top Priority, Next Actions, and Strategic Focus.</li>
+                    <li><strong>Weekly Debrief:</strong> Your After-Action Report. Click this at the end of your week. The AI analyzes your performance (completed vs. deferred tasks) to identify wins, hesitation points, and the single most important adjustment for the week ahead.</li>
+                    <li><strong>Mission Decomposition:</strong> The sparkle icon (<i class="fas fa-wand-magic-sparkles"></i>) on a task. It breaks down a complex mission into its first-principle actions to build momentum.</li>
+                </ul>
+
+                <h3>Tactical Execution Tools</h3>
+                <ul>
+                    <li><strong>Focus Sanctuary:</strong> A purpose-built environment for deep work. It combines a Pomodoro timer with engineered soundscapes (White Noise, Binaural Beats, etc.) to eliminate distractions and command focus.</li>
+                    <li><strong>The Forge:</strong> Your anti-procrastination weapon. The gavel icon (<i class="fas fa-gavel"></i>) on a task opens a Commitment Contract. Lock in a task with a hard deadline and a self-imposed penalty to manufacture accountability.</li>
+                    <li><strong>Calendar & Agenda:</strong> A strategic weekly view, not just a daily list. It shows your task distribution across the entire week to identify bottlenecks and opportunities.</li>
+                    <li><strong>Desktop Notifications:</strong> The bell icon (<i class="fas fa-bell"></i>) on each task arms a system-level alert. You will be notified when a critical task is due, even if the browser is minimized.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="focus-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2>Focus Sanctuary</h2>
+            <div id="focus-timer">25:00</div>
+            <p id="focus-task-name">Select a task to begin.</p>
+            <div class="timer-controls">
+                <button id="start-timer-btn" title="Start"><i class="fas fa-play"></i></button>
+                <button id="pause-timer-btn" title="Pause"><i class="fas fa-pause"></i></button>
+                <button id="reset-timer-btn" title="Reset"><i class="fas fa-redo"></i></button>
+            </div>
+             <form class="custom-time-form" id="custom-time-form">
+                <input type="number" id="custom-time-input" class="task-input" placeholder="Mins" min="1">
+                <button type="submit" class="add-task-btn">Set Time</button>
+            </form>
+            <div class="soundscape-controls">
+                <h3>Atmospheric Sound</h3>
+                <div class="sound-buttons">
+                    <button class="sound-btn" data-sound="off">Off</button>
+                    <button class="sound-btn" data-sound="white-noise">White Noise</button>
+                    <button class="sound-btn" data-sound="binaural">Binaural Beats</button>
+                    <button class="sound-btn" data-sound="rain">Rain</button>
+                    <button class="sound-btn" data-sound="forest">Forest</button>
+                    <button class="sound-btn" data-sound="cafe">Cafe</button>
+                </div>
+            </div>
+            <div id="focus-task-list" class="task-list" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <div id="forge-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2>Commitment Contract</h2>
+            <p style="margin-bottom: 20px; color: var(--text-secondary);">A contract against your future self. Define the terms.</p>
+            <form id="forge-contract-form">
+                <input type="hidden" id="forge-task-id">
+                <input type="text" id="forge-outcome" class="task-input" placeholder="Define the specific, measurable outcome..." required>
+                <input type="text" id="forge-deadline" class="date-input" placeholder="Set the hard deadline..." required>
+                <input type="text" id="forge-penalty" class="task-input" placeholder="State the penalty for failure..." required>
+                <button type="submit" class="add-task-btn" style="width: 100%; background: var(--danger);">Forge Contract</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="custom-prompt-modal" class="modal-overlay">
+         <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2>Email Reminder</h2>
+            <p style="margin-bottom:20px; color: var(--text-secondary)">Enter the recipient's email address.</p>
+            <form id="email-prompt-form">
+                <input type="email" id="email-prompt-input" class="task-input" placeholder="salman.shahid@example.com" required>
+                <button type="submit" class="add-task-btn" style="width:100%; margin-top:10px;">Send Reminder</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- JS Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const app = {
+                init() {
+                    this.state.load();
+                    this.ui.renderQuadrants();
+                    this.ui.renderAllTasks();
+                    this.calendar.init();
+                    this.eventListeners.init();
+                    this.email.init();
+                    this.focusMode.init();
+                    this.notifications.init();
+                }
+            };
+
+            app.state = {
+                tasks: [],
+                quadrantData: [
+                    { id: 'q1', title: 'Urgent & Important', subtitle: 'Do First', color: 'var(--danger)' },
+                    { id: 'q2', title: 'Not Urgent & Important', subtitle: 'Schedule', color: 'var(--accent-primary)' },
+                    { id: 'q3', title: 'Urgent & Not Important', subtitle: 'Delegate', color: 'var(--warning)' },
+                    { id: 'q4', title: 'Not Urgent & Not Important', subtitle: 'Eliminate', color: 'var(--success)' }
+                ],
+                load() {
+                    this.tasks = JSON.parse(localStorage.getItem('matrixTasksV3')) || [];
+                    const savedTheme = localStorage.getItem('matrixTheme') || 'dark-futuristic';
+                    document.body.dataset.theme = savedTheme;
+                 },
+                save() {
+                    localStorage.setItem('matrixTasksV3', JSON.stringify(this.tasks));
+                    app.ui.updateStatsDashboard();
+                },
+                addTask(taskData) {
+                    const newTask = { id: `task_${Date.now()}`, name: taskData.name, quadrant: taskData.quadrant, dueDate: taskData.dueDate || null, completed: false, completedAt: null, commitment: null, notificationsEnabled: false };
+                    this.tasks.push(newTask);
+                    this.save();
+                },
+                getTaskById(id) { return this.tasks.find(t => t.id === id); },
+                updateTask(id, updates) {
+                    const task = this.getTaskById(id);
+                    if (task) { 
+                        Object.assign(task, updates); 
+                        if (updates.completed === true) task.completedAt = new Date().toISOString();
+                        if (updates.completed === false) task.completedAt = null;
+                        this.save(); 
+                    }
+                },
+                deleteTask(id) {
+                    this.tasks = this.tasks.filter(t => t.id !== id);
+                    this.save();
+                }
+            };
+
+            app.ui = {
+                renderAllTasks() {
+                    document.querySelectorAll('.task-list').forEach(list => list.innerHTML = '');
+                    app.state.tasks.forEach(task => {
+                        const list = document.querySelector(`#task-list-${task.quadrant}`);
+                        if (list) list.appendChild(this.createTaskElement(task));
+                    });
+                    this.updateEmptyPlaceholders();
+                    this.updateStatsDashboard();
+                },
+                updateEmptyPlaceholders() {
+                    app.state.quadrantData.forEach(q => {
+                        const list = document.querySelector(`#task-list-${q.id}`);
+                        if (list && list.children.length === 0) list.innerHTML = `<div class="task-item" style="opacity: 0.5; cursor: default; justify-content: center;">No tasks yet.</div>`;
+                    });
+                },
+                renderQuadrants() {
+                    const container = document.getElementById('matrix-container');
+                    container.innerHTML = app.state.quadrantData.map(q => `
+                        <div class="quadrant" id="${q.id}" style="border-top-color: ${q.color};">
+                            <div class="quadrant-header"><h2>${q.title}</h2><span class="quadrant-subtitle">${q.subtitle}</span></div>
+                            <form class="task-form">
+                                <input type="text" class="task-input" placeholder="Add a new task..." required>
+                                <input type="text" class="date-input" placeholder="Due Date & Time...">
+                                <button type="submit" class="add-task-btn" title="Add Task"><i class="fas fa-plus"></i></button>
+                            </form>
+                            <button type="button" class="ai-suggest-btn" data-quadrant="${q.id}">✨ AI Suggestions</button>
+                            <ul class="task-list" id="task-list-${q.id}"></ul>
+                        </div>`).join('');
+                    document.querySelectorAll('.date-input').forEach(input => {
+                        flatpickr(input, { 
+                            enableTime: true,
+                            dateFormat: "Y-m-d H:i",
+                         });
+                    });
+                },
+                createTaskElement(task) {
+                    const li = document.createElement('li');
+                    li.className = `task-item ${task.completed ? 'completed' : ''} ${task.commitment?.active ? 'forged' : ''}`;
+                    li.dataset.taskId = task.id;
+                    li.setAttribute('draggable', 'true');
+                    const dueDateHtml = task.dueDate ? `<div class="task-due-date"><i class="fas fa-calendar-day"></i>${task.dueDate}</div>` : '';
+                    const gcalBtnHtml = `<button class="gcal-btn" title="Add to Google Calendar" ${!task.dueDate ? 'disabled' : ''}><i class="fab fa-google"></i></button>`;
+                    const notificationBtnClass = task.notificationsEnabled ? 'active' : '';
+                    li.innerHTML = `
+                        <div class="task-item-content">
+                             <div class="task-details"><input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} title="Mark as complete"><span class="task-name">${task.name}</span></div>
+                        </div>
+                        <div class="task-footer">
+                            ${dueDateHtml}
+                            <div class="task-actions">
+                                <button class="forge-btn" title="Commit to Task"><i class="fas fa-gavel"></i></button>
+                                ${gcalBtnHtml}
+                                <button class="ai-breakdown-btn" title="AI Breakdown"><i class="fas fa-wand-magic-sparkles"></i></button>
+                                <button class="notification-btn ${notificationBtnClass}" title="Toggle Desktop Notification"><i class="fas fa-bell"></i></button>
+                                <button class="whatsapp-btn" title="Send WhatsApp Reminder"><i class="fab fa-whatsapp"></i></button>
+                                <button class="email-btn" title="Send Email Reminder"><i class="fas fa-envelope"></i></button>
+                                <button class="delete-task-btn" title="Delete Task"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>`;
+                    return li;
+                },
+                showModal(modalId) { document.getElementById(modalId).classList.add('active'); },
+                closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); },
+                showAiModal(title, content) {
+                    document.getElementById('ai-modal-title').textContent = title;
+                    document.getElementById('ai-modal-content').innerHTML = content;
+                    this.showModal('ai-modal');
+                },
+                setLoadingButton(button, isLoading) {
+                    button.disabled = isLoading;
+                    button.innerHTML = isLoading ? '<div class="spinner" style="width:20px; height:20px; margin:0 auto; border-width:2px;"></div>' : '✨ AI Prioritize';
+                },
+                updateStatsDashboard() {
+                    const totalTasks = app.state.tasks.length;
+                    const completedTasks = app.state.tasks.filter(t => t.completed).length;
+                    const pendingTasks = totalTasks - completedTasks;
+                    const productivity = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+                    document.getElementById('total-tasks-stat').textContent = totalTasks;
+                    document.getElementById('completed-tasks-stat').textContent = completedTasks;
+                    document.getElementById('pending-tasks-stat').textContent = pendingTasks;
+                    document.getElementById('productivity-stat-value').textContent = `${productivity}%`;
+                },
+                parseAiResponseToHtml(text) {
+                    return text
+                        .replace(/\*\*(.*?)\*\*/g, '<h3>$1</h3>')
+                        .split('\n')
+                        .map(line => line.trim())
+                        .filter(line => line)
+                        .map(line => {
+                            if (line.startsWith('* ') || line.startsWith('- ')) {
+                                return `<li>${line.substring(2)}</li>`;
+                            }
+                            if(line.match(/^\d+\.\s/)) {
+                                return `<li>${line.replace(/^\d+\.\s/, '')}</li>`;
+                            }
+                            if(!line.startsWith('<h3>') && !line.startsWith('<li>')) {
+                                return `<p>${line}</p>`;
+                            }
+                            return line;
+                        })
+                        .join('')
+                        .replace(/<\/li><p>/g, '</li></ul><p>')
+                        .replace(/<\/h3><p>/g, '</h3><p>')
+                        .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
+                        .replace(/<\/ul><ul>/g, '');
+                },
+                updateTitle(view) {
+                    const baseTitle = "Project Hamzaifa v1.0";
+                    if(view === 'matrix') document.title = `Matrix | ${baseTitle}`;
+                    else if(view === 'calendar') document.title = `Calendar | ${baseTitle}`;
+                    else document.title = baseTitle;
+                }
+            };
+
+            app.eventListeners = {
+                init() {
+                    document.getElementById('matrix-container').addEventListener('submit', this.handleFormSubmit.bind(this));
+                    document.getElementById('matrix-container').addEventListener('click', this.handleQuadrantClicks.bind(this));
+                    document.getElementById('matrix-container').addEventListener('change', this.handleTaskCheckbox.bind(this));
+
+                    document.getElementById('smart-add-form').addEventListener('submit', this.handleSmartAdd.bind(this));
+                    document.getElementById('theme-toggle-btn').addEventListener('click', this.toggleTheme.bind(this));
+                    document.getElementById('matrix-view-btn').addEventListener('click', () => this.switchView('matrix'));
+                    document.getElementById('calendar-view-btn').addEventListener('click', () => this.switchView('calendar'));
+                    document.getElementById('weekly-debrief-btn').addEventListener('click', () => app.gemini.weeklyDebrief());
+                    document.getElementById('plan-my-day-btn').addEventListener('click', () => app.gemini.planMyDay());
+                    document.getElementById('focus-mode-btn').addEventListener('click', () => app.focusMode.open());
+                    document.getElementById('pdf-export-btn').addEventListener('click', () => app.notifications.exportToPdf());
+                    document.getElementById('guide-btn').addEventListener('click', () => app.ui.showModal('guide-modal'));
+                    document.getElementById('forge-contract-form').addEventListener('submit', this.handleForgeSubmit.bind(this));
+                    
+                    document.querySelectorAll('.close-modal').forEach(btn => btn.addEventListener('click', (e) => {
+                        const modalId = e.target.closest('.modal-overlay').id;
+                        app.ui.closeModal(modalId);
+                        if (modalId === 'focus-modal') app.focusMode.pause();
+                    }));
+
+                    const mainContent = document.querySelector('.main-content');
+                    mainContent.addEventListener('dragstart', this.handleDragStart.bind(this));
+                    mainContent.addEventListener('dragend', this.handleDragEnd.bind(this));
+                    mainContent.addEventListener('dragover', e => e.preventDefault());
+                    mainContent.addEventListener('drop', this.handleDrop.bind(this));
+                },
+                handleFormSubmit(e) {
+                    if (!e.target.classList.contains('task-form')) return;
+                    e.preventDefault();
+                    const form = e.target;
+                    app.state.addTask({ name: form.querySelector('.task-input').value, quadrant: form.parentElement.id, dueDate: form.querySelector('.date-input').value });
+                    app.ui.renderAllTasks();
+                    app.calendar.refresh();
+                    form.reset();
+                },
+                handleQuadrantClicks(e) {
+                    const button = e.target.closest('button');
+                    if (!button) return;
+                    const taskItem = e.target.closest('.task-item');
+                    const task = taskItem ? app.state.getTaskById(taskItem.dataset.taskId) : null;
+                    if (button.classList.contains('ai-suggest-btn')) app.gemini.suggestTasks(button.dataset.quadrant);
+                    if (!task) return;
+                    if (button.classList.contains('delete-task-btn')) app.state.deleteTask(task.id);
+                    if (button.classList.contains('ai-breakdown-btn')) app.gemini.breakdownTask(task);
+                    if (button.classList.contains('whatsapp-btn')) app.notifications.sendWhatsApp(task);
+                    if (button.classList.contains('email-btn')) app.email.openPrompt(task);
+                    if (button.classList.contains('gcal-btn')) app.notifications.sendToGoogleCalendar(task);
+                    if (button.classList.contains('forge-btn')) app.forge.open(task);
+                    if (button.classList.contains('notification-btn')) app.notifications.toggle(task.id, button);
+                    app.ui.renderAllTasks();
+                    app.calendar.refresh();
+                },
+                handleTaskCheckbox(e) {
+                    if (!e.target.classList.contains('task-checkbox')) return;
+                    const taskId = e.target.closest('.task-item').dataset.taskId;
+                    app.state.updateTask(taskId, { completed: e.target.checked });
+                    app.ui.renderAllTasks();
+                    app.calendar.refresh();
+                    app.forge.checkContracts();
+                },
+                async handleSmartAdd(e) {
+                    e.preventDefault();
+                    const input = document.getElementById('smart-add-input');
+                    const taskName = input.value.trim();
+                    if (!taskName) return;
+                    const button = e.target.querySelector('button');
+                    app.ui.setLoadingButton(button, true);
+                    const quadrantId = await app.gemini.categorizeTask(taskName);
+                    if (quadrantId) {
+                        app.state.addTask({ name: taskName, quadrant: quadrantId });
+                        app.ui.renderAllTasks();
+                        app.calendar.refresh();
+                        input.value = '';
+                    } else {
+                        alert("AI could not categorize this task. Please add it manually.");
+                    }
+                    app.ui.setLoadingButton(button, false);
+                },
+                switchView(viewName) {
+                    const matrixView = document.getElementById('matrix-container');
+                    const calendarView = document.getElementById('calendar-container');
+                    const matrixBtn = document.getElementById('matrix-view-btn');
+                    const calendarBtn = document.getElementById('calendar-view-btn');
+                    app.ui.updateTitle(viewName);
+                    if (viewName === 'calendar') {
+                        matrixView.style.display = 'none';
+                        calendarView.style.display = 'block';
+                        matrixBtn.classList.remove('active');
+                        calendarBtn.classList.add('active');
+                        app.calendar.instance.redraw();
+                        app.calendar.renderTasksForDate(app.calendar.instance.selectedDates[0] || new Date());
+                    } else {
+                        calendarView.style.display = 'none';
+                        matrixView.style.display = 'grid';
+                        calendarBtn.classList.remove('active');
+                        matrixBtn.classList.add('active');
+                    }
+                },
+                toggleTheme() {
+                    const currentTheme = document.body.dataset.theme;
+                    const newTheme = currentTheme === 'dark-futuristic' ? 'light-pro' : 'dark-futuristic';
+                    document.body.dataset.theme = newTheme;
+                    localStorage.setItem('matrixTheme', newTheme);
+                },
+                handleForgeSubmit(e) {
+                    e.preventDefault();
+                    const taskId = document.getElementById('forge-task-id').value;
+                    const contract = {
+                        outcome: document.getElementById('forge-outcome').value,
+                        deadline: document.getElementById('forge-deadline').value,
+                        penalty: document.getElementById('forge-penalty').value,
+                        active: true
+                    };
+                    app.state.updateTask(taskId, { commitment: contract });
+                    app.ui.renderAllTasks();
+                    app.ui.closeModal('forge-modal');
+                },
+                handleDragStart(e) { if (e.target.classList.contains('task-item')) { e.target.style.opacity = '0.5'; e.dataTransfer.setData('text/plain', e.target.dataset.taskId); } },
+                handleDragEnd(e) { if (e.target.classList.contains('task-item')) e.target.style.opacity = '1'; },
+                handleDrop(e) {
+                    const quadrant = e.target.closest('.quadrant');
+                    if (quadrant) {
+                        const taskId = e.dataTransfer.getData('text/plain');
+                        app.state.updateTask(taskId, { quadrant: quadrant.id });
+                        app.ui.renderAllTasks();
+                        app.calendar.refresh();
+                    }
+                }
+            };
+            
+            app.gemini = {
+                //
+// ... inside app.gemini ...
+//
+async _call(prompt) {
+    // The API URL is now your OWN serverless function
+    const apiUrl = `/api/gemini`; 
+    try {
+        // We now send the prompt in the body for our serverless function to use
+        const response = await fetch(apiUrl, { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify({ prompt: prompt }) // Pass the prompt in the body
+        });
+        
+        if (!response.ok) {
+            const errorResult = await response.json();
+            throw new Error(`API call failed: ${errorResult.message}`);
+        }
+        
+        const result = await response.json();
+        return result.candidates?.[0]?.content?.parts?.[0]?.text;
+    } catch (error) {
+        console.error('Error calling proxy API:', error);
+        app.ui.showAiModal("API Error", `Could not connect to the AI assistant. ${error.message}`);
+        return null;
+    }
+},
+                async categorizeTask(taskName) {
+                    const prompt = `Analyze this task: "${taskName}". Which Eisenhower Matrix quadrant does it belong to? Respond with only the quadrant ID: "q1" (Urgent & Important), "q2" (Not Urgent & Important), "q3" (Urgent & Not Important), or "q4" (Not Urgent & Not Important).`;
+                    const result = await this._call(prompt);
+                    return result ? result.trim().toLowerCase().match(/q[1-4]/)?.[0] : null;
+                },
+                async suggestTasks(quadrantId) {
+                    const goal = window.prompt("Enter a high-level goal to get task suggestions for:");
+                    if (!goal) return;
+                    const quadrantName = app.state.quadrantData.find(q => q.id === quadrantId).title;
+                    app.ui.showAiModal("AI Suggestions", `<div class="spinner"></div>`);
+                    const apiPrompt = `Act as a strategic advisor. For the goal "${goal}", identify 3 high-leverage initiatives that fit the strategic purpose of the "${quadrantName}" quadrant. Provide only a simple, actionable list, each on a new line. No fluff.`;
+                    const result = await this._call(apiPrompt);
+                    if (result) {
+                        const htmlResult = app.ui.parseAiResponseToHtml(result);
+                        app.ui.showAiModal(`Strategic Initiatives for "${goal}"`, htmlResult);
+                    }
+                },
+                async breakdownTask(task) {
+                    app.ui.showAiModal(`Decomposing "${task.name}"`, `<div class="spinner"></div>`);
+                    const result = await this._call(`Act as a top-tier operator with an IQ of 180. Decompose this mission: "${task.name}". Identify the first-principle action required to build momentum. Then, list the subsequent critical steps. Format using markdown with bold headings for sections and bullet points for steps. Be brutally honest and direct.`);
+                    if (result) {
+                        const htmlResult = app.ui.parseAiResponseToHtml(result);
+                        app.ui.showAiModal(`Mission Decomposition for "${task.name}"`, htmlResult);
+                    }
+                },
+                async planMyDay() {
+                    app.ui.showAiModal("Executive Briefing...", `<div class="spinner"></div>`);
+                    const tasksString = app.state.tasks.filter(t => !t.completed).map(t => `- ${t.name} (Quadrant: ${t.quadrant})`).join('\n');
+                    if (!tasksString) {
+                         app.ui.showAiModal("Your Day is Clear!", "You have no pending tasks. Great job! Time to relax or plan your next big goals.");
+                         return;
+                    }
+                    const prompt = `As a strategic advisor with an IQ of 180, analyze my pending tasks. Provide a brutally honest "Executive Briefing" for today. Use markdown. The format must be: 1. **Top Priority:** The single most critical task that creates the most leverage. 2. **Next Actions:** A bulleted list of the next 2-3 important tasks. 3. **Strategic Focus:** A one-sentence directive for managing today's workload. My tasks:\n${tasksString}`;
+                    const result = await this._call(prompt);
+                    if (result) {
+                        const htmlResult = app.ui.parseAiResponseToHtml(result);
+                        app.ui.showAiModal("Today's Executive Briefing", htmlResult);
+                    }
+                },
+                async weeklyDebrief() {
+                    app.ui.showAiModal("Weekly After-Action Report...", `<div class="spinner"></div>`);
+                    const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+                    const recentTasks = app.state.tasks.filter(t => t.completedAt && t.completedAt > oneWeekAgo);
+                    if (recentTasks.length === 0) {
+                        app.ui.showAiModal("Weekly Debrief", "No tasks were completed in the last 7 days. Plan your week and execute.");
+                        return;
+                    }
+                    const completedTasksString = recentTasks.map(t => `- ${t.name} (Quadrant: ${t.quadrant})`).join('\n');
+                    const prompt = `Act as a brutally honest performance coach. I am providing a list of tasks I completed in the last 7 days. Analyze this data. Provide a concise After-Action Report (AAR) in markdown. The format must be: 1. **Where You Won:** Acknowledge the most significant completed task. 2. **Where You Hesitated:** Identify the patterns of procrastination or avoidance based on the types of tasks completed vs. what a high-performer would prioritize (i.e., Q2 tasks). 3. **Single Most Important Adjustment:** Provide one clear, actionable directive for the upcoming week to fix this pattern. Here are the completed tasks:\n${completedTasksString}`;
+                    const result = await this._call(prompt);
+                    if (result) {
+                        const htmlResult = app.ui.parseAiResponseToHtml(result);
+                        app.ui.showAiModal("Weekly Debrief", htmlResult);
+                    }
+                }
+            };
+            
+            app.calendar = {
+                instance: null,
+                init() {
+                    this.instance = flatpickr("#calendar", { inline: true, dateFormat: "Y-m-d", onChange: (selectedDates, dateStr, instance) => this.renderTasksForDate(selectedDates[0] || new Date()) });
+                    this.refresh();
+                },
+                refresh() {
+                    this.instance.calendarContainer.querySelectorAll('.flatpickr-day').forEach(day => {
+                        const dateStr = this.instance.formatDate(day.dateObj, "Y-m-d");
+                        const hasTask = app.state.tasks.some(t => t.dueDate?.startsWith(dateStr));
+                        day.classList.toggle('has-task', hasTask);
+                    });
+                },
+                renderTasksForDate(date) {
+                    const agendaContainer = document.getElementById('weekly-agenda');
+                    agendaContainer.innerHTML = '';
+                    const week = this.getWeek(date);
+
+                    week.forEach(dayDate => {
+                        const dayStr = app.calendar.instance.formatDate(dayDate, "Y-m-d");
+                        const dayName = app.calendar.instance.formatDate(dayDate, "D");
+                        
+                        const dayColumn = document.createElement('div');
+                        dayColumn.className = 'day-column';
+                        dayColumn.innerHTML = `<div class="day-header">${dayName}<br>${dayStr}</div>`;
+                        
+                        const tasksForDay = app.state.tasks
+                            .filter(t => t.dueDate?.startsWith(dayStr))
+                            .sort((a,b) => a.dueDate.localeCompare(b.dueDate));
+                        
+                        if (tasksForDay.length > 0) {
+                            tasksForDay.forEach(task => {
+                                dayColumn.appendChild(app.ui.createTaskElement(task));
+                            });
+                        } else {
+                            dayColumn.innerHTML += `<div class="task-item" style="opacity: 0.5; justify-content: center;">No tasks scheduled.</div>`;
+                        }
+                        agendaContainer.appendChild(dayColumn);
+                    });
+                },
+                getWeek(d) {
+                    d = new Date(d);
+                    const day = d.getDay();
+                    const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+                    const monday = new Date(d.setDate(diff));
+                    const week = [monday];
+                    for (let i = 1; i < 7; i++) {
+                        week.push(new Date(new Date(monday).setDate(monday.getDate() + i)));
+                    }
+                    return week;
+                }
+            };
+
+            app.focusMode = {
+                timerId: null,
+                timeLeft: 25 * 60,
+                defaultTime: 25 * 60,
+                isRunning: false,
+                currentTask: null,
+                audioContext: null,
+                soundSource: null,
+                gainNode: null,
+                
+                elements: {
+                    modal: document.getElementById('focus-modal'),
+                    timerDisplay: document.getElementById('focus-timer'),
+                    taskName: document.getElementById('focus-task-name'),
+                    taskList: document.getElementById('focus-task-list'),
+                    startBtn: document.getElementById('start-timer-btn'),
+                    pauseBtn: document.getElementById('pause-timer-btn'),
+                    resetBtn: document.getElementById('reset-timer-btn'),
+                    customTimeForm: document.getElementById('custom-time-form'),
+                    customTimeInput: document.getElementById('custom-time-input'),
+                    soundButtons: document.querySelectorAll('.sound-btn'),
+                },
+
+                init() {
+                    this.elements.startBtn.addEventListener('click', () => this.start());
+                    this.elements.pauseBtn.addEventListener('click', () => this.pause());
+                    this.elements.resetBtn.addEventListener('click', () => this.reset());
+                    this.elements.customTimeForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.setCustomTime();
+                    });
+                    this.elements.soundButtons.forEach(btn => {
+                        btn.addEventListener('click', () => this.selectSound(btn));
+                    });
+                    window.addEventListener('click', () => {
+                        if (!this.audioContext) {
+                            try {
+                                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                                this.gainNode = this.audioContext.createGain();
+                                this.gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
+                                this.gainNode.connect(this.audioContext.destination);
+                            } catch(e) { console.error("Web Audio API is not supported."); }
+                        }
+                    }, { once: true });
+                },
+                open() {
+                    this.loadTasks();
+                    app.ui.showModal('focus-modal');
+                },
+                loadTasks() {
+                    this.elements.taskList.innerHTML = '';
+                    const tasks = [...app.state.tasks.filter(t => t.quadrant === 'q1' && !t.completed), ...app.state.tasks.filter(t => t.quadrant === 'q2' && !t.completed)];
+                    if (tasks.length > 0) {
+                        tasks.forEach(task => {
+                            const taskEl = app.ui.createTaskElement(task);
+                            taskEl.addEventListener('click', () => this.setTask(task));
+                            this.elements.taskList.appendChild(taskEl);
+                        });
+                        if (!this.currentTask || this.currentTask.completed) {
+                           this.setTask(tasks[0]);
+                        } else {
+                           this.setTask(this.currentTask);
+                        }
+                    } else {
+                        this.elements.taskName.textContent = 'No important tasks to focus on. Great job!';
+                        this.currentTask = null;
+                        this.reset();
+                    }
+                },
+                setTask(task) {
+                    this.currentTask = task;
+                    this.elements.taskName.textContent = task.name;
+                    this.reset();
+                    this.elements.taskList.querySelectorAll('.task-item').forEach(el => {
+                        el.style.borderLeftColor = el.dataset.taskId === task.id ? 'var(--accent-secondary)' : 'var(--accent-primary)';
+                    });
+                },
+                start() {
+                    if (this.isRunning) return;
+                    this.isRunning = true;
+                    this.elements.timerDisplay.classList.remove('finished');
+                    this.timerId = setInterval(() => {
+                        this.timeLeft--;
+                        this.updateDisplay();
+                        if (this.timeLeft <= 0) this.finish();
+                    }, 1000);
+                },
+                pause() {
+                    this.isRunning = false;
+                    clearInterval(this.timerId);
+                },
+                reset() {
+                    this.pause();
+                    this.timeLeft = this.defaultTime;
+                    this.elements.timerDisplay.classList.remove('finished');
+                    this.updateDisplay();
+                },
+                 setCustomTime() {
+                    const mins = parseInt(this.elements.customTimeInput.value, 10);
+                    if (mins > 0) {
+                        this.defaultTime = mins * 60;
+                        this.reset();
+                        this.elements.customTimeInput.value = '';
+                    }
+                },
+                finish() {
+                    this.pause();
+                    this.playNotificationSound();
+                    this.elements.timerDisplay.classList.add('finished');
+                    this.elements.timerDisplay.textContent = "Done!";
+                    app.ui.updateTitle("Session Complete!");
+                    if (this.currentTask) {
+                        app.state.updateTask(this.currentTask.id, { completed: true });
+                        app.ui.renderAllTasks();
+                        this.currentTask.completed = true;
+                    }
+                    setTimeout(() => {
+                        this.loadTasks();
+                        this.reset();
+                    }, 2000);
+                },
+                updateDisplay() {
+                    const minutes = String(Math.floor(this.timeLeft / 60)).padStart(2, '0');
+                    const seconds = String(this.timeLeft % 60).padStart(2, '0');
+                    const timeString = `${minutes}:${seconds}`;
+                    this.elements.timerDisplay.textContent = timeString;
+                    app.ui.updateTitle(`${timeString} - ${this.currentTask?.name || 'Focus'}`);
+                },
+                selectSound(selectedBtn) {
+                    this.stopSound();
+                    this.elements.soundButtons.forEach(btn => btn.classList.remove('active'));
+                    selectedBtn.classList.add('active');
+                    const soundType = selectedBtn.dataset.sound;
+                    if(soundType !== 'off') {
+                        this.playSound(soundType);
+                    }
+                },
+                playSound(type) {
+                    if (!this.audioContext || this.soundSource) return;
+                    
+                    if (type === 'white-noise') {
+                        const bufferSize = this.audioContext.sampleRate * 2;
+                        const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
+                        const output = buffer.getChannelData(0);
+                        for (let i = 0; i < bufferSize; i++) {
+                            output[i] = Math.random() * 2 - 1;
+                        }
+                        this.soundSource = this.audioContext.createBufferSource();
+                        this.soundSource.buffer = buffer;
+                        this.soundSource.loop = true;
+                        this.soundSource.connect(this.gainNode);
+                        this.soundSource.start();
+                    } else if (type === 'binaural') {
+                        const leftOscillator = this.audioContext.createOscillator();
+                        leftOscillator.type = 'sine';
+                        leftOscillator.frequency.setValueAtTime(136.1, this.audioContext.currentTime);
+                        
+                        const rightOscillator = this.audioContext.createOscillator();
+                        rightOscillator.type = 'sine';
+                        rightOscillator.frequency.setValueAtTime(140.1, this.audioContext.currentTime);
+
+                        const merger = this.audioContext.createChannelMerger(2);
+                        leftOscillator.connect(merger, 0, 0);
+                        rightOscillator.connect(merger, 0, 1);
+                        merger.connect(this.gainNode);
+                        
+                        this.soundSource = { left: leftOscillator, right: rightOscillator, merger: merger };
+                        leftOscillator.start();
+                        rightOscillator.start();
+                    } else if (type === 'rain' || type === 'forest' || type === 'cafe') {
+                         const bufferSize = this.audioContext.sampleRate * 4;
+                         const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
+                         const output = buffer.getChannelData(0);
+                         let lastOut = 0;
+                         for (let i = 0; i < bufferSize; i++) {
+                             let noise;
+                             if(type === 'rain') {
+                                 noise = Math.random() * 2 - 1;
+                             } else if (type === 'forest') {
+                                 let brown = (lastOut + (0.02 * (Math.random() * 2 - 1))) / 1.02;
+                                 lastOut = brown;
+                                 noise = brown * 3.5;
+                                 if(Math.random() > 0.995) noise = 1;
+                             } else { 
+                                let b0=0, b1=0, b2=0, b3=0, b4=0, b5=0, b6=0;
+                                let white = Math.random() * 2 - 1;
+                                b0 = 0.99886 * b0 + white * 0.0555179;
+                                b1 = 0.99332 * b1 + white * 0.0750759;
+                                b2 = 0.96900 * b2 + white * 0.1538520;
+                                b3 = 0.86650 * b3 + white * 0.3104856;
+                                b4 = 0.55000 * b4 + white * 0.5329522;
+                                b5 = -0.7616 * b5 - white * 0.0168980;
+                                noise = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
+                                b6 = white * 0.115926;
+                             }
+                             output[i] = noise;
+                         }
+                         this.soundSource = this.audioContext.createBufferSource();
+                         this.soundSource.buffer = buffer;
+                         this.soundSource.loop = true;
+                         this.soundSource.connect(this.gainNode);
+                         this.soundSource.start();
+                    }
+                },
+                stopSound() {
+                     if (this.soundSource) {
+                        if (this.soundSource.merger) {
+                            this.soundSource.left.stop();
+                            this.soundSource.right.stop();
+                            this.soundSource.merger.disconnect();
+                        } else if(this.soundSource.stop) {
+                            try { this.soundSource.stop(); } catch(e) {}
+                        }
+                        this.soundSource = null;
+                    }
+                },
+                playNotificationSound() {
+                    if (!this.audioContext) return;
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(440, this.audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(0.5, this.audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + 1);
+                    oscillator.start(this.audioContext.currentTime);
+                    oscillator.stop(this.audioContext.currentTime + 1);
+                }
+            };
+            
+            app.forge = {
+                open(task) {
+                    document.getElementById('forge-task-id').value = task.id;
+                    const form = document.getElementById('forge-contract-form');
+                    form.reset();
+                    flatpickr(form.querySelector('#forge-deadline'), {
+                        enableTime: true,
+                        dateFormat: "Y-m-d H:i",
+                    });
+                    app.ui.showModal('forge-modal');
+                },
+                checkContracts() {
+                    const now = new Date();
+                    app.state.tasks.forEach(task => {
+                        if (task.commitment?.active && !task.completed) {
+                            const deadline = new Date(task.commitment.deadline);
+                            if (now > deadline) {
+                                app.ui.showAiModal("Commitment Failure", `You failed to complete the task "${task.name}" by its deadline. The self-imposed penalty was: <br><br><strong>"${task.commitment.penalty}"</strong><br><br>A professional honors their commitments.`);
+                                task.commitment.active = false; // Deactivate so it doesn't trigger again
+                                app.state.save();
+                                app.ui.renderAllTasks();
+                            }
+                        }
+                    });
+                }
+            };
+
+            app.notifications = {
+                init() {
+                    if ("Notification" in window) {
+                        if(Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+                            setTimeout(() => {
+                                Notification.requestPermission();
+                            }, 5000);
+                        }
+                    }
+                    setInterval(this.checkAndSend.bind(this), 60000); // Check every minute
+                },
+                toggle(taskId, button) {
+                    const task = app.state.getTaskById(taskId);
+                    if(task) {
+                        app.state.updateTask(taskId, { notificationsEnabled: !task.notificationsEnabled });
+                        button.classList.toggle('active', !task.notificationsEnabled);
+                    }
+                },
+                checkAndSend() {
+                    const now = new Date();
+                    app.state.tasks.forEach(task => {
+                        if (task.notificationsEnabled && !task.completed && task.dueDate) {
+                            const dueDate = new Date(task.dueDate);
+                            if (now >= dueDate && (now - dueDate < 60000)) { // If due within the last minute
+                                this.sendDesktopNotification(task);
+                            }
+                        }
+                    });
+                },
+                async sendDesktopNotification(task) {
+                     if (!("Notification" in window) || Notification.permission !== "granted") {
+                        return; // Cannot send notification
+                    }
+                    const body = await app.gemini._call(`Generate a short, brutally honest notification body for this urgent task: "${task.name}". Remind the user that high-performers execute.`);
+                    new Notification(`Task Due: ${task.name}`, {
+                        body: body || "The time for action is now. Execute.",
+                        icon: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><path fill=%22%239d63f0%22 d=%22M50 0 L100 50 L50 100 L0 50 Z%22/></svg>"
+                    });
+                },
+                sendWhatsApp(task) { window.open(`https://wa.me/?text=${encodeURIComponent(`*Task Reminder:*\n${task.name}`)}`, '_blank'); },
+                sendToGoogleCalendar(task) {
+                    if (!task.dueDate) return;
+                    const date = new Date(task.dueDate);
+                    const startDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().replace(/-|:|\.\d+/g, '');
+                    const endDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000) + (60 * 60 * 1000)).toISOString().replace(/-|:|\.\d+/g, '');
+                    const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(task.name)}&dates=${startDate}/${endDate}`;
+                    window.open(url, '_blank');
+                },
+                exportToPdf() {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+                    const name = "Salman Shahid";
+
+                    doc.setFont( 'Orbitron', 'bold');
+                    doc.setFontSize(22);
+                    doc.setTextColor(45, 48, 71);
+                    doc.text("Project Hamzaifa v1.0 - Strategic Report", 105, 20, { align: 'center' });
+                    
+                    doc.setFont('Inter', 'normal');
+                    doc.setFontSize(10);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text(`Prepared for: ${name}`, 105, 28, { align: 'center' });
+                    doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 33, { align: 'center' });
+
+                    const head = app.state.quadrantData.map(q => ({
+                        content: `${q.title}\n${q.subtitle}`,
+                        styles: { halign: 'center', fillColor: q.id === 'q1' ? [229, 62, 62] : q.id === 'q2' ? [79, 70, 229] : q.id === 'q3' ? [221, 107, 32] : [56, 161, 105] }
+                    }));
+                    
+                    const body = [];
+                    const maxRows = Math.max(...app.state.quadrantData.map(q => app.state.tasks.filter(t => t.quadrant === q.id).length));
+                    
+                    for (let i = 0; i < maxRows; i++) {
+                        const row = app.state.quadrantData.map(q => {
+                            const tasks = app.state.tasks.filter(t => t.quadrant === q.id);
+                            return tasks[i] ? `[${tasks[i].completed ? 'x' : ' '}] ${tasks[i].name}` : '';
+                        });
+                        body.push(row);
+                    }
+
+                    doc.autoTable({
+                        head: [head],
+                        body: body,
+                        startY: 45,
+                        theme: 'grid',
+                        styles: { font: 'Inter', cellPadding: 3 },
+                        headStyles: { font: 'Orbitron', fontStyle: 'bold', textColor: [255,255,255] },
+                        didParseCell: function (data) {
+                            if(data.section === 'body') {
+                                data.cell.styles.fillColor = data.cell.raw ? '#f4f7fa' : '#ffffff';
+                            }
+                        }
+                    });
+
+                    const pageCount = doc.internal.getNumberOfPages();
+                    for(let i = 1; i <= pageCount; i++) {
+                        doc.setPage(i);
+                        doc.setFontSize(8);
+                        doc.setTextColor(150, 150, 150);
+                        doc.text(`Page ${i} of ${pageCount}`, 105, 285, { align: 'center' });
+                        doc.text("Powered by Project Hamzaifa", 195, 285, { align: 'right' });
+                    }
+
+                    doc.save(`Strategic-Report-${name.replace(' ','-')}-${new Date().toISOString().slice(0,10)}.pdf`);
+                }
+            };
+
+            app.email = {
+                init() {
+                    const serviceID = 'service_9ap1fup';
+                    const templateID = 'template_intylxh';
+                    const userID = '8Waz9jnIc4-9wdgDK';
+                    this.isConfigured = serviceID !== 'YOUR_SERVICE_ID' && templateID !== 'YOUR_TEMPLATE_ID' && userID !== 'YOUR_USER_ID';
+                    if (this.isConfigured) emailjs.init(userID);
+                    this.serviceID = serviceID;
+                    this.templateID = templateID;
+                    this.quotes = [
+                        "The secret of getting ahead is getting started.",
+                        "The only way to do great work is to love what you do.",
+                        "Believe you can and you're halfway there.",
+                        "Act as if what you do makes a difference. It does.",
+                        "Success is not final, failure is not fatal: it is the courage to continue that counts."
+                    ];
+                    this.currentTask = null;
+                },
+                openPrompt(task) {
+                    if (!this.isConfigured) {
+                        alert("Email notifications have not been set up. Please see the comments in the script to configure your free EmailJS account.");
+                        return;
+                    }
+                    this.currentTask = task;
+                    app.ui.showModal('custom-prompt-modal');
+                    document.getElementById('email-prompt-form').addEventListener('submit', this.handlePromptSubmit.bind(this), {once: true});
+                },
+                handlePromptSubmit(e) {
+                    e.preventDefault();
+                    const userEmail = document.getElementById('email-prompt-input').value;
+                    app.ui.closeModal('custom-prompt-modal');
+                    if (userEmail && this.currentTask) {
+                        this.send(this.currentTask, userEmail);
+                    }
+                },
+                send(task, userEmail) {
+                    const randomQuote = this.quotes[Math.floor(Math.random() * this.quotes.length)];
+                    const templateParams = { 
+                        to_email: userEmail, 
+                        task_name: task.name, 
+                        due_date: task.dueDate || 'N/A', 
+                        quadrant: app.state.quadrantData.find(q => q.id === task.quadrant).title,
+                        quote: randomQuote
+                    };
+                    emailjs.send(this.serviceID, this.templateID, templateParams)
+                        .then(() => app.ui.showAiModal("Success", `Email reminder sent to ${userEmail}`), (error) => {
+                            app.ui.showAiModal("Failure", "Failed to send email. Check console for details.");
+                            console.log('EMAILJS FAILED...', error);
+                        });
+                }
+            };
+            
+            app.init();
+        });
+    </script>
+</body>
+</html>
